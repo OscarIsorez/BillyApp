@@ -14,8 +14,8 @@ enum TtsState { playing, stopped, paused, continued }
 
 class _Page1State extends State<Page1> {
   late FlutterTts flutterTts;
-  String? language;
-  String? engine;
+  String? language = 'en-GB-default';
+  String? engine = "com.samsung.SMT";
   double volume = 0.5;
   double pitch = 1.0;
   double rate = 0.5;
@@ -206,11 +206,11 @@ class _Page1State extends State<Page1> {
         child: Column(
           children: [
             _inputSection(),
-            _btnSection(),
-            _engineSection(),
-            _futureBuilder(),
-            _buildSliders(),
-            if (isAndroid) _getMaxSpeechInputLengthSection(),
+            // _btnSection(),
+            // _engineSection(),
+            // _futureBuilder(),
+            // _buildSliders(),
+            // if (isAndroid) _getMaxSpeechInputLengthSection(),
           ],
         ),
       ),

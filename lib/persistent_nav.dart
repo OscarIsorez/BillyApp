@@ -22,7 +22,7 @@ class _PersistentTabScreenState extends State<PersistentTabScreen> {
   }
 
   List<Widget> _buildScreens() {
-    return [Page1(), Page2(), Page3()];
+    return [Page1(), Page2(), Page3(allMessages: [])];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

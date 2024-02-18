@@ -7,11 +7,14 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
 
 class Page3 extends StatefulWidget {
+  const Page3({super.key, required List<String> allMessages});
+
   @override
   State<Page3> createState() => _Page3State();
 }
 
 class _Page3State extends State<Page3> {
+  late List<String> _allMessages;
   final ScrollController _scrollController = ScrollController();
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
@@ -21,6 +24,7 @@ class _Page3State extends State<Page3> {
   void initState() {
     super.initState();
     _initSpeech();
+    
   }
 
   /// This has to happen only once per app
