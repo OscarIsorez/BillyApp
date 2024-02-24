@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:billy/ttsState.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ class Page1 extends StatefulWidget {
   _Page1State createState() => _Page1State();
 }
 
-enum TtsState { playing, stopped, paused, continued }
 
 class _Page1State extends State<Page1> {
   late FlutterTts flutterTts;
@@ -39,7 +39,7 @@ class _Page1State extends State<Page1> {
   @override
   initState() {
     super.initState();
-    initTts();
+      initTts();
   }
 
   initTts() {
