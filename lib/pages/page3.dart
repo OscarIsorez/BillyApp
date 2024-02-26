@@ -25,150 +25,146 @@ class _Page3State extends State<Page3> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
-  late FlutterTts flutterTts;
-  String? language = 'en-GB-default';
-  String? engine = "com.samsung.SMT";
-  double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
-  bool isCurrentLanguageInstalled = false;
+  late TtsManager ttsManager;
+  // String? language = 'en-GB-default';
+  // String? engine = "com.samsung.SMT";
+  // double volume = 0.5;
+  // double pitch = 1.0;
+  // double rate = 0.5;
+  // bool isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
   int? _inputLength;
 
-  TtsState ttsState = TtsState.stopped;
+  // TtsState ttsState = TtsState.stopped;
 
-  get isPlaying => ttsState == TtsState.playing;
-  get isStopped => ttsState == TtsState.stopped;
-  get isPaused => ttsState == TtsState.paused;
-  get isContinued => ttsState == TtsState.continued;
+  // get isPlaying => ttsState == TtsState.playing;
+  // get isStopped => ttsState == TtsState.stopped;
+  // get isPaused => ttsState == TtsState.paused;
+  // get isContinued => ttsState == TtsState.continued;
 
-  bool get isIOS => !kIsWeb && Platform.isIOS;
-  bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  bool get isWindows => !kIsWeb && Platform.isWindows;
-  bool get isWeb => kIsWeb;
+  // bool get isIOS => !kIsWeb && Platform.isIOS;
+  // bool get isAndroid => !kIsWeb && Platform.isAndroid;
+  // bool get isWindows => !kIsWeb && Platform.isWindows;
+  // bool get isWeb => kIsWeb;
 
   @override
   void initState() {
     super.initState();
-    TtsManager ttsManager = TtsManager();
+    ttsManager = TtsManager();
     _initSpeech();
     initTts();
   }
 
   initTts() {
-    flutterTts = FlutterTts();
-
     _setAwaitOptions();
 
-    if (isAndroid) {
+    if (ttsManager.isAndroid) {
       _getDefaultEngine();
       _getDefaultVoice();
     }
 
-    flutterTts.setStartHandler(() {
+    ttsManager.flutterTts.setStartHandler(() {
       setState(() {
         print("Playing");
-        ttsState = TtsState.playing;
+        ttsManager.ttsState = TtsState.playing;
       });
     });
 
-    if (isAndroid) {
-      flutterTts.setInitHandler(() {
+    if (ttsManager.isAndroid) {
+      ttsManager.flutterTts.setInitHandler(() {
         setState(() {
           print("TTS Initialized");
         });
       });
     }
 
-    flutterTts.setCompletionHandler(() {
+    ttsManager.flutterTts.setCompletionHandler(() {
       setState(() {
         print("Complete");
-        ttsState = TtsState.stopped;
+        ttsManager.ttsState = TtsState.stopped;
       });
     });
 
-    flutterTts.setCancelHandler(() {
+    ttsManager.flutterTts.setCancelHandler(() {
       setState(() {
         print("Cancel");
-        ttsState = TtsState.stopped;
+        ttsManager.ttsState = TtsState.stopped;
       });
     });
 
-    flutterTts.setPauseHandler(() {
+    ttsManager.flutterTts.setPauseHandler(() {
       setState(() {
         print("Paused");
-        ttsState = TtsState.paused;
+        ttsManager.ttsState = TtsState.paused;
       });
     });
 
-    flutterTts.setContinueHandler(() {
+    ttsManager.flutterTts.setContinueHandler(() {
       setState(() {
         print("Continued");
-        ttsState = TtsState.continued;
+        ttsManager.ttsState = TtsState.continued;
       });
     });
 
-    flutterTts.setErrorHandler((msg) {
+    ttsManager.flutterTts.setErrorHandler((msg) {
       setState(() {
         print("error: $msg");
-        ttsState = TtsState.stopped;
+        ttsManager.ttsState = TtsState.stopped;
       });
     });
   }
 
-  Future<dynamic> _getLanguages() async => await flutterTts.getLanguages;
+  Future<dynamic> _getLanguages() async =>
+      await ttsManager.flutterTts.getLanguages;
 
-  Future<dynamic> _getEngines() async => await flutterTts.getEngines;
+  Future<dynamic> _getEngines() async => await ttsManager.flutterTts.getEngines;
 
   Future _getDefaultEngine() async {
-    var engine = await flutterTts.getDefaultEngine;
+    var engine = await ttsManager.flutterTts.getDefaultEngine;
     if (engine != null) {
       print(engine);
     }
   }
 
   Future _getDefaultVoice() async {
-    var voice = await flutterTts.getDefaultVoice;
+    var voice = await ttsManager.flutterTts.getDefaultVoice;
     if (voice != null) {
       print(voice);
     }
   }
 
   Future _speak() async {
-    await flutterTts.setVolume(volume);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(pitch);
+    await ttsManager.flutterTts.setVolume(ttsManager.volume);
+    await ttsManager.flutterTts.setSpeechRate(ttsManager.rate);
+    await ttsManager.flutterTts.setPitch(ttsManager.pitch);
 
     if (_newVoiceText != null) {
       if (_newVoiceText!.isNotEmpty) {
-        await flutterTts.speak(_newVoiceText!);
+        await ttsManager.flutterTts.speak(_newVoiceText!);
       }
     }
   }
 
   Future _setAwaitOptions() async {
-    await flutterTts.awaitSpeakCompletion(true);
+    await ttsManager.flutterTts.awaitSpeakCompletion(true);
   }
 
   Future _stop() async {
-    var result = await flutterTts.stop();
-    if (result == 1) setState(() => ttsState = TtsState.stopped);
+    var result = await ttsManager.flutterTts.stop();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.stopped);
   }
 
   Future _pause() async {
-    var result = await flutterTts.pause();
-    if (result == 1) setState(() => ttsState = TtsState.paused);
+    var result = await ttsManager.flutterTts.pause();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.paused);
   }
 
   @override
   void dispose() {
     super.dispose();
-    flutterTts.stop();
+    ttsManager.flutterTts.stop();
   }
-
- 
-  
 
   void _onChange(String text) {
     setState(() {
@@ -178,28 +174,28 @@ class _Page3State extends State<Page3> {
 
   Widget _pitch() {
     return Slider(
-      value: pitch,
+      value: ttsManager.pitch,
       onChanged: (newPitch) {
-        setState(() => pitch = newPitch);
+        setState(() => ttsManager.pitch = newPitch);
       },
       min: 0.5,
       max: 2.0,
       divisions: 15,
-      label: "Pitch: $pitch",
+      label: "Pitch: $ttsManager.pitch",
       activeColor: Colors.red,
     );
   }
 
   Widget _rate() {
     return Slider(
-      value: rate,
+      value: ttsManager.rate,
       onChanged: (newRate) {
-        setState(() => rate = newRate);
+        setState(() => ttsManager.rate = newRate);
       },
       min: 0.0,
       max: 1.0,
       divisions: 10,
-      label: "Rate: $rate",
+      label: "Rate: $ttsManager.rate",
       activeColor: Colors.green,
     );
   }
@@ -211,7 +207,7 @@ class _Page3State extends State<Page3> {
   }
 
   /// Each time to start a speech recognition session
-  void  _startListening() async {
+  void _startListening() async {
     await _speechToText.listen(
       onResult: (SpeechRecognitionResult result) {
         if (result.finalResult) {

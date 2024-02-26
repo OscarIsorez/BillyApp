@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TtsManager {
-  late FlutterTts flutterTts;
+  FlutterTts flutterTts = FlutterTts();
   String? language = 'en-GB-default';
   String? engine = "com.samsung.SMT";
   double volume = 0.5;
