@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:billy/Message.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/ttsState.dart';
@@ -238,10 +239,9 @@ class _Page3State extends State<Page3> {
         Provider.of<ChatProvider>(context, listen: false)
             .addMessage(_lastWords);
         await Provider.of<ChatProvider>(context, listen: false).fetchResponse();
-        _newVoiceText =
+        Message? _newVoiceText =
             Provider.of<ChatProvider>(context, listen: false).getLastMessage();
-        print("_newVoiceText" + _newVoiceText!);
-        _onChange(_newVoiceText!);
+        _onChange(_newVoiceText!.content);
         await _speak();
         _startListening();
       }
@@ -251,9 +251,6 @@ class _Page3State extends State<Page3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Speech Demo'),
-      ),
       body: Consumer<ChatProvider>(
         builder: (context, chatProvider, child) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -270,7 +267,7 @@ class _Page3State extends State<Page3> {
             itemCount: chatProvider.messages.length,
             itemBuilder: (context, index) {
               return TextBubble(
-                message: chatProvider.messages[index],
+                message: chatProvider.messages[index].content,
                 isSender: index % 2 == 0, // Change this as needed
               );
             },

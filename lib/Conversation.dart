@@ -2,6 +2,12 @@ import 'package:billy/Message.dart';
 
 class Conversation {
   List<Message> _messages = [];
+  final String name;
+  final String avatar;
+  final String theme;
+
+  // Constructor
+  Conversation({required this.name, required this.avatar, required  this.theme});
 
   // Get the list of messages
   List<Message> get messages => _messages;
@@ -11,7 +17,20 @@ class Conversation {
     _messages.add(message);
   }
 
-  // Get the conversation history
+  Message? getLastMessage() {
+    if (_messages.isEmpty) {
+      return null;
+    }
+    return _messages.last;
+  }
+
+  SenderType? getLastSender() {
+    if (_messages.isEmpty) {
+      return null;
+    }
+    return _messages.last.sender;
+  }
+
   String getHistory() {
     return _messages.map((message) {
       return '${message.timestamp}: ${message.sender} - ${message.content}';

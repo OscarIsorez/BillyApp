@@ -8,4 +8,12 @@ class Constants {
   static const SenderColorMessage = Color(0xFF5381A7);
   // ignore: non_constant_identifier_names
   static const ReceiverColorMessage = Color.fromARGB(255, 212, 111, 111);
+
+  static const List<String> themes = [
+    'Theme 1',
+    'Theme 2',
+    'Theme 3',
+  ];
+
+
 }
