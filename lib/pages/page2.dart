@@ -7,13 +7,15 @@ import 'package:provider/provider.dart';
 import 'package:billy/pages/home_page.dart';
 
 class Page2 extends StatefulWidget {
+  const Page2({super.key});
+
   @override
   State<Page2> createState() => _Page2State();
 }
 
 class _Page2State extends State<Page2> {
   //  une liste de themes
-  var selectedTheme;
+  String selectedTheme = Constants.themes[0];
 
   //  des controllers pour les champs Names, Avatar et Theme
   final TextEditingController nameController = TextEditingController();
@@ -39,14 +41,35 @@ class _Page2State extends State<Page2> {
         itemCount: conversations.length,
         itemBuilder: (context, index) {
           final conversation = conversations[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(conversation.avatar),
-            ),
-            title: Text(conversation.name),
-            subtitle: Text(conversation.theme),
-            onTap: () {},
-          );
+          return Dismissible(
+              key: Key(conversation.name),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                setState(() {
+                  conversations.removeAt(index);
+                });
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("${conversation.name} dismissed")));
+              },
+              background: Container(
+                color: Colors.red,
+                child: const Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 12.0),
+                    child: Icon(Icons.delete, color: Colors.white),
+                  ),
+                ),
+              ),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(conversation.avatar),
+                ),
+                title: Text(conversation.name),
+                subtitle: Text(conversation.theme),
+                onTap: () {},
+              ));
         },
       ),
       floatingActionButton: FloatingActionButton(
