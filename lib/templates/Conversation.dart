@@ -1,4 +1,4 @@
-import 'package:billy/Message.dart';
+import 'package:billy/templates/Message.dart';
 
 class Conversation {
   List<Message> _messages = [];

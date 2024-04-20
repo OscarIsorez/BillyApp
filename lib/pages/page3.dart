@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 
-import 'package:billy/Message.dart';
+import 'package:billy/templates/Message.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/ttsState.dart';

@@ -1,4 +1,5 @@
-import 'package:billy/Conversation.dart';
+import 'package:billy/components/MyDropDownButton.dart';
+import 'package:billy/templates/Conversation.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/constant.dart';
@@ -125,48 +126,6 @@ class _Page2State extends State<Page2> {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-}
-
-class MyDropdownButton extends StatefulWidget {
-  final List<String> themes;
-  final ValueChanged<String> onValueChanged;
-
-  MyDropdownButton({required this.themes, required this.onValueChanged});
-
-  @override
-  _MyDropdownButtonState createState() => _MyDropdownButtonState();
-}
-
-class _MyDropdownButtonState extends State<MyDropdownButton> {
-  String dropdownValue = Constants.themes[0];
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-
-        widget.onValueChanged(newValue!);
-      },
-      items: widget.themes.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
     );
   }
 }
