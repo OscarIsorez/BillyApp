@@ -1,13 +1,14 @@
+import 'package:billy/templates/ConversationType.dart';
+
 class ConvTheme {
-  final String name;
+  final ConversationType type;
   final String sysPrompt;
 
-  ConvTheme({required this.name, required this.sysPrompt});
+  ConvTheme({required this.type, required this.sysPrompt});
 
   @override
   String toString() {
-    return name;
+    return type.toString();
+    ;
   }
-
-  
 }
