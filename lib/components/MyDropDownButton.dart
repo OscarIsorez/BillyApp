@@ -1,4 +1,5 @@
 import 'package:billy/constant.dart';
+import 'package:billy/templates/ConvTheme.dart';
 import 'package:flutter/material.dart';
 
 class MyDropdownButton extends StatefulWidget {
@@ -12,12 +13,12 @@ class MyDropdownButton extends StatefulWidget {
 }
 
 class _MyDropdownButtonState extends State<MyDropdownButton> {
-  String dropdownValue = Constants.themes[0];
+  ConvTheme dropdownValue = Constants.convThemes[0];
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: dropdownValue,
+      value: dropdownValue.toString(),
       icon: Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
@@ -28,7 +29,7 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
       ),
       onChanged: (String? newValue) {
         setState(() {
-          dropdownValue = newValue!;
+          dropdownValue = ConvTheme.fromString(newValue!);
         });
 
         widget.onValueChanged(newValue!);

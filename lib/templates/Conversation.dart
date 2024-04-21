@@ -1,13 +1,14 @@
+import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Message.dart';
 
 class Conversation {
   List<Message> _messages = [];
   final String name;
   final String avatar;
-  final String theme;
+  final ConvTheme theme;
 
   // Constructor
-  Conversation({required this.name, required this.avatar, required  this.theme});
+  Conversation({required this.name, required this.avatar, required this.theme});
 
   // Get the list of messages
   List<Message> get messages => _messages;

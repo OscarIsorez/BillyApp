@@ -1,4 +1,5 @@
 import 'package:billy/components/MyDropDownButton.dart';
+import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/components/text_bubble.dart';
@@ -16,7 +17,7 @@ class Page2 extends StatefulWidget {
 
 class _Page2State extends State<Page2> {
   //  une liste de themes
-  String selectedTheme = Constants.themes[0];
+  ConvTheme selectedTheme = Constants.convThemes[0];
 
   //  des controllers pour les champs Names, Avatar et Theme
   final TextEditingController nameController = TextEditingController();
@@ -26,12 +27,12 @@ class _Page2State extends State<Page2> {
     Conversation(
       name: 'John Doe',
       avatar: 'https://via.placeholder.com/150',
-      theme: Constants.themes[0],
+      theme: Constants.convThemes[0],
     ),
     Conversation(
       name: 'Jane Doe',
       avatar: 'https://via.placeholder.com/150',
-      theme: Constants.themes[0],
+      theme: Constants.convThemes[0],
     ),
   ];
 
@@ -68,7 +69,7 @@ class _Page2State extends State<Page2> {
                   backgroundImage: NetworkImage(conversation.avatar),
                 ),
                 title: Text(conversation.name),
-                subtitle: Text(conversation.theme),
+                subtitle: Text(conversation.theme.toString()),
                 onTap: () {},
               ));
         },
@@ -88,9 +89,12 @@ class _Page2State extends State<Page2> {
                       decoration: InputDecoration(labelText: 'Name'),
                     ),
                     MyDropdownButton(
-                        themes: Constants.themes,
+                        //  la liste des convtheme qqui est de type ConvTheme que l'on transforme en liste de string
+                        themes: Constants.convThemes
+                            .map((e) => e.toString())
+                            .toList(),
                         onValueChanged: (value) {
-                          selectedTheme = value;
+                          selectedTheme = ConvTheme.fromString(value);
                         })
                   ],
                 ),
