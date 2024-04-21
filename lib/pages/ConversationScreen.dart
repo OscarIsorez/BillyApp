@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:billy/AudioPlayerProvider.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/templates/Message.dart';
 import 'package:billy/conversation_provider.dart';
@@ -211,6 +212,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   /// Each time to start a speech recognition session
   void _startListening() async {
+    Provider.of<AudioPlayerProvider>(context, listen: false).play();
     await _speechToText.listen(
       onResult: (SpeechRecognitionResult result) {
         if (result.finalResult) {
