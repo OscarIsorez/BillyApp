@@ -1,4 +1,5 @@
 import 'package:billy/AudioPlayerProvider.dart';
+import 'package:billy/llm_api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,8 @@ class _Page1State extends State<Page1> {
 
   @override
   void dispose() {
+    _isAnimating = false;
+    _streamController.add(_isAnimating);
     _streamController.close();
     super.dispose();
   }
@@ -45,6 +48,9 @@ class _Page1State extends State<Page1> {
               });
               Provider.of<AudioPlayerProvider>(context, listen: false).play();
               await Future.delayed(const Duration(milliseconds: 600));
+              if (!_isAnimating) {
+                break;
+              }
               setState(() {
                 _width = 200;
                 _height = 200;

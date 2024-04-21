@@ -1,8 +1,8 @@
-import 'package:billy/chat_provider.dart';
+import 'package:billy/conversation_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/pages/page1.dart';
 import 'package:billy/pages/page2.dart';
-import 'package:billy/pages/page3.dart';
+import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/persistent_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -49,8 +49,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     );
     if (available) {
       _speech.listen(
-        onResult: (val) => Provider.of<ChatProvider>(context, listen: false)
-            .addMessage(val.recognizedWords),
+        onResult: (val) =>
+            Provider.of<ConversationProvider>(context, listen: false)
+                .addMessage(val.recognizedWords),
       );
     }
   }

@@ -1,5 +1,7 @@
+import 'package:billy/llm_api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:billy/constant.dart';
+import 'package:provider/provider.dart';
 
 class TextBubble extends StatelessWidget {
   final String message;
@@ -49,7 +51,32 @@ class TextBubble extends StatelessWidget {
                       builder: (context) {
                         return AlertDialog(
                           title: const Text('Message Details'),
-                          content: Text(message),
+                          content: // on affiche le message, puis ce meme message corrigé par une requete au llm
+                              Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Original Message: $message'),
+                              const SizedBox(height: 8.0),
+                              FutureBuilder<String>(
+                                future: Provider.of<LlmApiManager>(context)
+                                    .correctMessage(message),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else {
+                                    if (snapshot.hasError)
+                                      return Text('Error: ${snapshot.error}');
+                                    else
+                                      return Text(
+                                          'Corrected Message: ${snapshot.data}'); // snapshot.data contains the result
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                           actions: [
                             TextButton(
                               onPressed: () {

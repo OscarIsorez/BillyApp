@@ -1,7 +1,8 @@
 import 'package:billy/AppTheme/theme_provider.dart';
 import 'package:billy/AudioPlayerProvider.dart';
-import 'package:billy/chat_provider.dart';
+import 'package:billy/conversation_provider.dart';
 import 'package:billy/constant.dart';
+import 'package:billy/llm_api_manager.dart';
 import 'package:billy/pages/about_page.dart';
 import 'package:billy/pages/home_page.dart';
 import 'package:billy/pages/premium_page.dart';
@@ -19,8 +20,9 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (context) => ConversationProvider()),
         ChangeNotifierProvider(create: (context) => AudioPlayerProvider()),
+        ChangeNotifierProvider(create: (context) => LlmApiManager()),
       ],
       child: const MyApp(),
     ),

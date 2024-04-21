@@ -1,8 +1,8 @@
 import 'package:billy/components/MyDropDownButton.dart';
-import 'package:billy/pages/page3.dart';
+import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
-import 'package:billy/chat_provider.dart';
+import 'package:billy/conversation_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/constant.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class _Page2State extends State<Page2> {
                 subtitle: Text(conversation.theme.toString()),
                 onTap: () {
                   //  on va sur la page 3 pour afficher les messages et pouvoir continuer la conversation
-                  Provider.of<ChatProvider>(context, listen: false)
+                  Provider.of<ConversationProvider>(context, listen: false)
                       .setConversation(conversation);
                   Navigator.push(
                     context,

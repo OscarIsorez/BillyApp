@@ -1,6 +1,7 @@
 import 'package:billy/AppTheme/theme_provider.dart';
 import 'package:billy/pages/page1.dart';
 import 'package:billy/pages/page2.dart';
+import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/pages/page3.dart';
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
@@ -33,17 +34,7 @@ class _PersistentTabScreenState extends State<PersistentTabScreen> {
   }
 
   List<Widget> _buildScreens() {
-    return [
-      Page1(),
-      Page2(),
-      ConversationScreen(
-        conversation: Conversation(
-          name: "Start",
-          avatar: '',
-          theme: ConvTheme(type: ConversationType.Normal),
-        ),
-      ),
-    ];
+    return [Page1(), Page2(), Page3()];
   }
 
   void _onPageChanged(int index) {

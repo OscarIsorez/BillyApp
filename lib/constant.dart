@@ -19,6 +19,12 @@ class Constants {
     'Theme 3',
   ];
 
+  static const correctionSystemPrompt =
+      """In this task, your goal is to generate a corrected version of a message that will be concatenated to these instructions.
+       You should make corrections if the message is not in English or if it contains errors in syntax or grammar.
+        Do not provide any explanation of your reasoning. Just ensure that the corrected message is grammatically correct and written in English.
+         Thank you for your participation!""";
+
   static Color SenderTextColor = Color(0xFF5381A7);
   static Color ReceiverTextColor = Color.fromARGB(255, 212, 111, 111);
 
