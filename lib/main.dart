@@ -20,10 +20,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(
           create: (context) => ChatProvider(
-              conversation: Conversation(
-                  name: 'Billy',
-                  avatar: 'https://via.placeholder.com/150',
-                  theme: ConvTheme(type: ConversationType.Bakery))),
+              ),
         ),
       ],
       child: const MyApp(),

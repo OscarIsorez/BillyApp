@@ -142,6 +142,8 @@ class _Page3State extends State<Page3> {
 
     if (_newVoiceText != null) {
       if (_newVoiceText!.isNotEmpty) {
+        //  on arrete de listem
+        _stopListening();
         await ttsManager.flutterTts.speak(_newVoiceText!);
       }
     }
@@ -217,6 +219,7 @@ class _Page3State extends State<Page3> {
       },
     );
 
+    //  BUG : quand on quitte la page, erreur.
     setState(() {});
   }
 
