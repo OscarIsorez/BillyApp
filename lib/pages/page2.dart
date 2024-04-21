@@ -77,8 +77,9 @@ class _Page2State extends State<Page2> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChangeNotifierProvider(
-                        create: (context) => ChatProvider(),
-                        child:  Page3(conversation: conversation),
+                        create: (context) =>
+                            ChatProvider(conversation: conversation),
+                        child: Page3(conversation: conversation),
                       ),
                     ),
                   );

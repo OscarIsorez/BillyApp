@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:billy/constant.dart';
 import 'package:billy/templates/ConversationType.dart';
 
 class ConvTheme {
@@ -7,16 +8,17 @@ class ConvTheme {
   late String sysPrompt;
 
   ConvTheme({required this.type}) {
-    sysPrompt = getContenu(
-        'lib/prompts/${type.toString().split('.').last.toLowerCase()}.txt');
+    sysPrompt = getSysPrompt();
   }
 
-  String getContenu(String path) {
-    final file = File(path);
-    if (file.existsSync()) {
-      return file.readAsStringSync();
-    } else {
-      return 'File not found';
+  String getSysPrompt() {
+    switch (type) {
+      case ConversationType.Normal:
+        return Constants.noThemePrompt;
+      case ConversationType.Bakery:
+        return Constants.bakeryPrompt;
+      case ConversationType.Bank:
+        return Constants.bankPrompt;
     }
   }
 

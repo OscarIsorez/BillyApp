@@ -4,6 +4,9 @@ import 'package:billy/pages/home_page.dart';
 import 'package:billy/pages/premium_page.dart';
 import 'package:billy/pages/profile_page.dart';
 import 'package:billy/pages/settings_page.dart';
+import 'package:billy/templates/ConvTheme.dart';
+import 'package:billy/templates/Conversation.dart';
+import 'package:billy/templates/ConversationType.dart';
 import 'package:billy/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +14,11 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ChatProvider(),
+      create: (context) => ChatProvider(
+          conversation: Conversation(
+              name: 'Billy',
+              avatar: 'https://via.placeholder.com/150',
+              theme: ConvTheme(type: ConversationType.Bakery))),
       child: const MyApp(),
     ),
   );
