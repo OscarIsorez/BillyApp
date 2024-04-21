@@ -219,8 +219,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       },
     );
 
-    //  BUG : quand on quitte la page, erreur.
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   /// Manually stop the active speech recognition session

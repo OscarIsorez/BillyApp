@@ -1,4 +1,5 @@
 import 'package:billy/AppTheme/theme_provider.dart';
+import 'package:billy/AudioPlayerProvider.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/constant.dart';
 import 'package:billy/pages/about_page.dart';
@@ -18,10 +19,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(
-          create: (context) => ChatProvider(
-              ),
-        ),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (context) => AudioPlayerProvider()),
       ],
       child: const MyApp(),
     ),
