@@ -72,16 +72,14 @@ class _Page2State extends State<Page2> {
                 title: Text(conversation.name),
                 subtitle: Text(conversation.theme.toString()),
                 onTap: () {
+                  //  on va sur la page 3 pour afficher les messages et pouvoir continuer la conversation
                   Provider.of<ChatProvider>(context, listen: false)
                       .setConversation(conversation);
-                  //  on va sur la page 3 pour afficher les messages et pouvoir continuer la conversation
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                        create: (context) => ChatProvider(),
-                        child: Page3(conversation: conversation),
-                      ),
+                      builder: (context) =>
+                          ConversationScreen(conversation: conversation),
                     ),
                   );
                 },

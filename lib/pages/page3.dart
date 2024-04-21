@@ -14,14 +14,14 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
 
-class Page3 extends StatefulWidget {
-  const Page3({super.key, required Conversation conversation});
+class ConversationScreen extends StatefulWidget {
+  const ConversationScreen({super.key, required Conversation conversation});
 
   @override
-  State<Page3> createState() => _Page3State();
+  State<ConversationScreen> createState() => _ConversationScreenState();
 }
 
-class _Page3State extends State<Page3> {
+class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController _scrollController = ScrollController();
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
@@ -254,6 +254,10 @@ class _Page3State extends State<Page3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: Text(Provider.of<ChatProvider>(context, listen: false)
+              .conversation
+              .name)),
       body: Consumer<ChatProvider>(
         builder: (context, chatProvider, child) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

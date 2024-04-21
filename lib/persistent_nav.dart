@@ -36,7 +36,7 @@ class _PersistentTabScreenState extends State<PersistentTabScreen> {
     return [
       Page1(),
       Page2(),
-      Page3(
+      ConversationScreen(
         conversation: Conversation(
           name: "Start",
           avatar: '',
