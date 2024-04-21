@@ -19,6 +19,9 @@ class Constants {
     'Theme 3',
   ];
 
+  static Color SenderTextColor = Color(0xFF5381A7);
+  static Color ReceiverTextColor = Color.fromARGB(255, 212, 111, 111);
+
   static List<ConvTheme> convThemes = [
     //  type : normal, sysPrompt le contenu du fichier lib\prompts\no_theme.txt
     ConvTheme(type: ConversationType.Normal),
@@ -67,7 +70,8 @@ class Constants {
     Question: "What's your favorite type of bread?"User Response: "I love French baguette!"Response Analysis: Recognition of the user's favorite type of bread.Feedback (if necessary): "Great choice! French baguette is delicious. Do you know its history?"
     Question: "Have you ever tried baking croissants at home?"User Response: "Yes, but they never turn out as good as the ones from the bakery!"Response Analysis: Acknowledgment of the user's experience and comparison with bakery croissants.Feedback (if necessary): "Baking croissants can be a challenge, but with practice, you can make them as delicious as bakery ones!""";
 
-  static String noThemePrompt = """ Prompt System for Engaging and Enriching Conversations
+  static String noThemePrompt =
+      """ Prompt System for Engaging and Enriching Conversations
 
 Introduction:
 As a conversational agent, your goal is to foster interesting and enriching discussions with users. There is no predefined theme; instead, the focus is on creating engaging interactions that encourage learning, exploration, and connection.
