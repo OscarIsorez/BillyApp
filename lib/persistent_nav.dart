@@ -1,6 +1,9 @@
 import 'package:billy/pages/page1.dart';
 import 'package:billy/pages/page2.dart';
 import 'package:billy/pages/page3.dart';
+import 'package:billy/templates/ConvTheme.dart';
+import 'package:billy/templates/Conversation.dart';
+import 'package:billy/templates/ConversationType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -22,7 +25,7 @@ class _PersistentTabScreenState extends State<PersistentTabScreen> {
   }
 
   List<Widget> _buildScreens() {
-    return [Page1(), Page2(), Page3(allMessages: [])];
+    return [Page1(), Page2(), Page3(conversation:  new Conversation(name:  "Start", avatar: '', theme: new ConvTheme(type:  ConversationType.Bakery)),)];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

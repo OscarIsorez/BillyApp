@@ -1,4 +1,5 @@
 import 'package:billy/components/MyDropDownButton.dart';
+import 'package:billy/pages/page3.dart';
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/chat_provider.dart';
@@ -70,7 +71,18 @@ class _Page2State extends State<Page2> {
                 ),
                 title: Text(conversation.name),
                 subtitle: Text(conversation.theme.toString()),
-                onTap: () {},
+                onTap: () {
+                  //  on va sur la page 3 pour afficher les messages et pouvoir continuer la conversation
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (context) => ChatProvider(),
+                        child:  Page3(conversation: conversation),
+                      ),
+                    ),
+                  );
+                },
               ));
         },
       ),

@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:billy/templates/Conversation.dart';
 import 'package:billy/templates/Message.dart';
 import 'package:billy/chat_provider.dart';
 import 'package:billy/components/text_bubble.dart';
@@ -14,14 +15,13 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
 
 class Page3 extends StatefulWidget {
-  const Page3({super.key, required List<String> allMessages});
+  const Page3({super.key, required Conversation conversation});
 
   @override
   State<Page3> createState() => _Page3State();
 }
 
 class _Page3State extends State<Page3> {
-  late List<String> _allMessages;
   final ScrollController _scrollController = ScrollController();
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
