@@ -14,6 +14,18 @@ class Message {
     };
   }
 
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      sender: json['sender'] == 'user'
+          ? SenderType.user
+          : json['sender'] == 'system'
+              ? SenderType.system
+              : SenderType.bot,
+      content: json['content'],
+      timestamp: json['timestamp'],
+    );
+  }
+
   String get senderTypeToString {
     switch (sender) {
       case SenderType.user:

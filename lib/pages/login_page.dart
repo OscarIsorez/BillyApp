@@ -3,10 +3,12 @@
 import 'package:billy/components/my_button.dart';
 import 'package:billy/components/my_text_field.dart';
 import 'package:billy/components/square_tile.dart';
+import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -83,14 +85,14 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               MyTextField(
                 controller: emailControler,
-                hintText: 'Username',
-                obscureText: false,
+                hintText: 'Useeeername',
+                tohide: false,
               ),
               const SizedBox(height: 20),
               MyTextField(
                 controller: passwordController,
                 hintText: 'Password',
-                obscureText: true,
+                tohide: true,
               ),
               const SizedBox(height: 20),
               Padding(
@@ -144,11 +146,15 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   SquareTile(
                       imagePath: "assets/google.png",
-                      onTap: () => AuthService().signInWithGoogle()),
+                      onTap: () {
+                        AuthService().signInWithGoogle();
+                      }),
                   SizedBox(width: 25),
                   SquareTile(
                       imagePath: 'assets/logo-apple.png',
-                      onTap: () => AuthService().signInWithGoogle())
+                      onTap: () {
+                        AuthService().signInWithGoogle();
+                      }),
                 ],
               ),
               const SizedBox(height: 20),

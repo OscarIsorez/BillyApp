@@ -1,5 +1,6 @@
 import 'package:billy/components/MyDropDownButton.dart';
 import 'package:billy/pages/ConversationScreen.dart';
+import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/providers/conversation_provider.dart';
@@ -20,24 +21,30 @@ class _Page2State extends State<Page2> {
 
   //  des controllers pour les champs Names, Avatar et Theme
   final TextEditingController nameController = TextEditingController();
+  List<Conversation> conversations = [];
 
   //  une liste de Conversartion
-  List<Conversation> conversations = [
-    Conversation(
-      name: 'John Doe',
-      theme: Constants.convThemes[0],
-    ),
-    Conversation(
-      name: 'Jane Doe',
-      theme: Constants.convThemes[0],
-    ),
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      conversations =
+          await Provider.of<Database>(context, listen: false).getConvList();
+      if (mounted) {
+        setState(
+            () {}); // Call setState to trigger a rebuild after data is fetched
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
+        // la liste des converstions de l'utilisateur dans la base
         itemCount: conversations.length,
+
         itemBuilder: (context, index) {
           final conversation = conversations[index];
           return Dismissible(
@@ -47,6 +54,8 @@ class _Page2State extends State<Page2> {
                 setState(() {
                   conversations.removeAt(index);
                 });
+                Provider.of<Database>(context, listen: false)
+                    .deleteConversation(conversation);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("${conversation.name} dismissed")));
@@ -123,7 +132,9 @@ class _Page2State extends State<Page2> {
                           ),
                         );
                       });
-                      print(conversations);
+                      Provider.of<Database>(context, listen: false).addConv(
+                          Conversation(
+                              name: nameController.text, theme: selectedTheme));
                       Navigator.of(context).pop();
                       nameController.clear();
                     },

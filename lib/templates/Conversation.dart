@@ -44,4 +44,13 @@ class Conversation {
       'messages': _messages.map((message) => message.toJson()).toList(),
     };
   }
+
+  factory Conversation.fromJson(Map<String, dynamic> json) {
+    return Conversation(
+      name: json['name'],
+      theme: ConvTheme.fromString(json['theme']),
+    ).._messages = (json['messages'] as List)
+        .map((message) => Message.fromJson(message))
+        .toList();
+  }
 }

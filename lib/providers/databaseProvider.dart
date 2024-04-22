@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 class Database with ChangeNotifier {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
+  List<Conversation> convList = [];
+
   // Database({required this.uid});
 
   final _db = FirebaseFirestore.instance;
@@ -22,22 +24,40 @@ class Database with ChangeNotifier {
         .collection('ConvList') // Access the 'Conversations' sub-collection
         .get();
 
-    List<Conversation> conversations = [];
-    print(' the conversations are: ');
-    print(querySnapshot.docs);
-
-    return conversations;
+    return querySnapshot.docs
+        .map((doc) => Conversation.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 
-  Future<void> addConvToUser(Conversation conversation) async {
+  Future<int> getConvListSize() async {
     CollectionReference users = _db.collection('Users');
-    await users
+    QuerySnapshot querySnapshot = await users
         .doc(uid) // Use the user's ID
         .collection('ConvList') // Access the 'Conversations' sub-collection
+        .get();
+
+    return querySnapshot.docs.length;
+  }
+
+  Future<void> addConv(Conversation conversation) async {
+    CollectionReference users = _db.collection('Users');
+    //  si l'élement est déjà présent dans la liste, on ne l'ajoute pas
+    if (await users
+        .doc(uid) // Use the user's ID
+        .collection('ConvList') // Access the 'Conversations' sub-collection
+        .doc(
+            conversation.name) // Use the conversation's name as the document ID
+        .get()
+        .then((doc) => doc.exists)) {
+      return;
+    }
+    await users
+        .doc(uid) // Use the user's ID
+        .collection('ConvList')
         .add(conversation.toJson());
   }
 
-  Future<void> updateConvInUser(Conversation conversation) async {
+  Future<void> updateConversation(Conversation conversation) async {
     CollectionReference users = _db.collection('Users');
     await users
         .doc(uid) // Use the user's ID
@@ -47,14 +67,30 @@ class Database with ChangeNotifier {
         .update(conversation.toJson());
   }
 
-  Future<void> deleteConvFromUser(Conversation conversation) async {
+  Future<void> deleteConversation(Conversation conversation) async {
     CollectionReference users = _db.collection('Users');
-    await users
+    QuerySnapshot querySnapshot = await users
         .doc(uid) // Use the user's ID
         .collection('ConvList') // Access the 'Conversations' sub-collection
-        .doc(
-            conversation.name) // Use the conversation's name as the document ID
-        .delete();
+        .get();
+
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      if (doc['name'] == conversation.name) {
+        await doc.reference.delete();
+      }
+    }
+  }
+
+  Future<void> deleteAllConversations() async {
+    CollectionReference users = _db.collection('Users');
+    QuerySnapshot querySnapshot = await users
+        .doc(uid) // Use the user's ID
+        .collection('ConvList') // Access the 'Conversations' sub-collection
+        .get();
+
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
   }
 
   addUser(UserModel user) async {
@@ -62,7 +98,7 @@ class Database with ChangeNotifier {
         .collection('Users')
         .doc(uid)
         .set(user.toJson())
-        .whenComplete(() => print('User added'))
+        .whenComplete(() => print(user.name + ' added to database'))
         .catchError((error) => print('Failed to add user: $error'));
   }
 
@@ -72,7 +108,6 @@ class Database with ChangeNotifier {
     return UserModel(
       name: documentSnapshot['name'],
       email: documentSnapshot['email'],
-      password: documentSnapshot['password'],
     );
   }
 

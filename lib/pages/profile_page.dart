@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
 
-  final user = FirebaseAuth.instance.currentUser!;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +21,12 @@ class ProfilePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 color: Theme.of(context).colorScheme.surface,
               ),
-              child: Text('You are logged in as : ${user.email!}'),
+              child: Text(
+                  'You are logged in as : ${FirebaseAuth.instance.currentUser!.email!}'),
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-            },
-            child: const Text('Logout'),
-          ),
+
+          // Add a button to
         ],
       ),
     );

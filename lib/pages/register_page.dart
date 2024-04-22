@@ -3,11 +3,13 @@
 import 'package:billy/components/my_button.dart';
 import 'package:billy/components/my_text_field.dart';
 import 'package:billy/components/square_tile.dart';
+import 'package:billy/pages/UserModel.dart';
+import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -44,7 +46,12 @@ class _RegisterPageState extends State<RegisterPage> {
         email: emailControler.text,
         password: passwordController.text,
       );
-      Navigator.pop(context);
+      Provider.of<Database>(context, listen: false).addUser(
+          UserModel(name: emailControler.text, email: emailControler.text));
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(e.code);
@@ -91,20 +98,20 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 15),
               MyTextField(
                 controller: emailControler,
-                hintText: 'Username',
-                obscureText: false,
+                hintText: 'Email',
+                tohide: false,
               ),
               const SizedBox(height: 15),
               MyTextField(
                 controller: passwordController,
                 hintText: 'Password',
-                obscureText: true,
+                tohide: true,
               ),
               const SizedBox(height: 15),
               MyTextField(
                 controller: confirmPasswordController,
                 hintText: 'Confirm Password',
-                obscureText: true,
+                tohide: true,
               ),
               const SizedBox(height: 15),
               const SizedBox(height: 15),
@@ -143,11 +150,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareTile(
-                      imagePath: "lib/assets/google.png",
+                      imagePath: "assets/google.png",
                       onTap: () => AuthService().signInWithGoogle()),
                   SizedBox(width: 25),
                   SquareTile(
-                    imagePath: 'lib/assets/logo-apple.png',
+                    imagePath: 'assets/logo-apple.png',
                     onTap: () => AuthService().signInWithGoogle(),
                   )
                 ],

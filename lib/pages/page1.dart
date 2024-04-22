@@ -44,15 +44,6 @@ class _Page1State extends State<Page1> {
           onTap: () async {
             _isAnimating = !_isAnimating;
             _streamController.add(_isAnimating);
-            Database db = Provider.of<Database>(context, listen: false);
-            db.addUser(
-                UserModel(name: "Billy", email: "mail", password: "password"));
-
-            db.addConvToUser(Conversation(
-                name: "Billy",
-                theme: ConvTheme(type: ConversationType.Normal)));
-
-            db.getConvList();
 
             while (_isAnimating) {
               setState(() {
@@ -61,6 +52,7 @@ class _Page1State extends State<Page1> {
                 _outerWidth = 240;
                 _outerHeight = 240;
               });
+
               Provider.of<AudioPlayerProvider>(context, listen: false).play();
               await Future.delayed(const Duration(milliseconds: 600));
               if (!_isAnimating) {
