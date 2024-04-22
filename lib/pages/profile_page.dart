@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -9,24 +12,25 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: const Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 20),
-          SizedBox(height: 20),
-          Text(
-            'Billy',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              child: Text('You are logged in as : ${user.email!}'),
+            ),
           ),
-          SizedBox(height: 10),
-          Text(
-            'Billy@gmail.com',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 20),
-          Text(
-            "Total Coins: 100",
-            style: TextStyle(fontSize: 16),
+          ElevatedButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+            child: const Text('Logout'),
           ),
         ],
       ),

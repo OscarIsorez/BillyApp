@@ -8,9 +8,7 @@ import 'dart:convert';
 
 class ConversationProvider with ChangeNotifier {
   Conversation conversation = Conversation(
-      name: 'Billy',
-      avatar: 'https://via.placeholder.com/150',
-      theme: ConvTheme(type: ConversationType.Normal));
+      name: 'Billy', theme: ConvTheme(type: ConversationType.Normal));
 
   List<Message> get messages => conversation.messages;
 

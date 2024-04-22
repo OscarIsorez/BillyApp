@@ -27,12 +27,10 @@ class _Page2State extends State<Page2> {
   List<Conversation> conversations = [
     Conversation(
       name: 'John Doe',
-      avatar: 'https://via.placeholder.com/150',
       theme: Constants.convThemes[0],
     ),
     Conversation(
       name: 'Jane Doe',
-      avatar: 'https://via.placeholder.com/150',
       theme: Constants.convThemes[0],
     ),
   ];
@@ -67,7 +65,7 @@ class _Page2State extends State<Page2> {
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(conversation.avatar),
+                  child: Text(conversation.name[0]),
                 ),
                 title: Text(conversation.name),
                 subtitle: Text(conversation.theme.toString()),
@@ -123,7 +121,6 @@ class _Page2State extends State<Page2> {
                         conversations.add(
                           Conversation(
                             name: nameController.text,
-                            avatar: 'https://via.placeholder.com/150',
                             theme: selectedTheme,
                           ),
                         );

@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
           '/about': (context) => AboutPage(),
           '/premium': (context) => PremiumPage(),
           '/profile': (context) => ProfilePage(),
-          '/settings': (context) => SettingsPage(),
+          '/settings': (context) => const SettingsPage(),
+          '/login': (context) => const AuthPage(),
         });
   }
 }

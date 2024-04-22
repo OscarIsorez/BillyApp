@@ -236,7 +236,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   /// This is the callback that the SpeechToText plugin calls when
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
-    print('Result: ${result.recognizedWords}');
     setState(() async {
       _lastWords = result.recognizedWords;
       if (_lastWords.isNotEmpty) {
