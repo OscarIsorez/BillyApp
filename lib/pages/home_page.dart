@@ -4,6 +4,7 @@ import 'package:billy/pages/page1.dart';
 import 'package:billy/pages/page2.dart';
 import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/persistent_nav.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late stt.SpeechToText _speech;
   late AnimationController _controller;
   bool _isListening = false;
+
+  final user = FirebaseAuth.instance.currentUser!;
+
+  void singOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 
   @override
   void initState() {
