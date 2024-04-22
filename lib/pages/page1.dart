@@ -1,4 +1,10 @@
+import 'package:billy/pages/UserModel.dart';
 import 'package:billy/providers/AudioPlayerProvider.dart';
+import 'package:billy/providers/databaseProvider.dart';
+import 'package:billy/templates/ConvTheme.dart';
+import 'package:billy/templates/Conversation.dart';
+import 'package:billy/templates/ConversationType.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +26,7 @@ class _Page1State extends State<Page1> {
   double _outerHeight = 220;
   bool _isAnimating = false;
   StreamController<bool> _streamController = StreamController<bool>();
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   void dispose() {
@@ -37,6 +44,15 @@ class _Page1State extends State<Page1> {
           onTap: () async {
             _isAnimating = !_isAnimating;
             _streamController.add(_isAnimating);
+            Database db = Provider.of<Database>(context, listen: false);
+            db.addUser(
+                UserModel(name: "Billy", email: "mail", password: "password"));
+
+            db.addConvToUser(Conversation(
+                name: "Billy",
+                theme: ConvTheme(type: ConversationType.Normal)));
+
+            db.getConvList();
 
             while (_isAnimating) {
               setState(() {

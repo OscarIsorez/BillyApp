@@ -6,7 +6,6 @@ class Conversation {
   final String name;
   final ConvTheme theme;
 
-
   // Constructor
   Conversation({required this.name, required this.theme});
 
@@ -36,5 +35,13 @@ class Conversation {
     return _messages.map((message) {
       return '${message.timestamp}: ${message.sender} - ${message.content}';
     }).join('\n');
+  }
+
+  toJson() {
+    return {
+      'name': name,
+      'theme': theme.toString(),
+      'messages': _messages.map((message) => message.toJson()).toList(),
+    };
   }
 }

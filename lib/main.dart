@@ -2,6 +2,7 @@ import 'package:billy/AppTheme/theme_provider.dart';
 import 'package:billy/providers/AudioPlayerProvider.dart';
 import 'package:billy/providers/conversation_provider.dart';
 import 'package:billy/firebase_options.dart';
+import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/providers/llm_api_manager.dart';
 import 'package:billy/pages/about_page.dart';
 import 'package:billy/pages/auth_page.dart';
@@ -26,6 +27,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ConversationProvider()),
         ChangeNotifierProvider(create: (context) => AudioPlayerProvider()),
         ChangeNotifierProvider(create: (context) => LlmApiManager()),
+        ChangeNotifierProvider(create: (context) => Database()),
       ],
       child: const MyApp(),
     ),
