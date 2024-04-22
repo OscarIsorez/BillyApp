@@ -1,8 +1,8 @@
 import 'package:billy/AppTheme/theme_provider.dart';
-import 'package:billy/AudioPlayerProvider.dart';
-import 'package:billy/conversation_provider.dart';
+import 'package:billy/providers/AudioPlayerProvider.dart';
+import 'package:billy/providers/conversation_provider.dart';
 import 'package:billy/firebase_options.dart';
-import 'package:billy/llm_api_manager.dart';
+import 'package:billy/providers/llm_api_manager.dart';
 import 'package:billy/pages/about_page.dart';
 import 'package:billy/pages/auth_page.dart';
 import 'package:billy/pages/home_page.dart';

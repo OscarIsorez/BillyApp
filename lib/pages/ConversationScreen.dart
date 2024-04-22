@@ -1,10 +1,10 @@
-import 'package:billy/AudioPlayerProvider.dart';
+import 'package:billy/providers/AudioPlayerProvider.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/templates/Message.dart';
-import 'package:billy/conversation_provider.dart';
+import 'package:billy/providers/conversation_provider.dart';
 import 'package:billy/components/text_bubble.dart';
-import 'package:billy/ttsState.dart';
-import 'package:billy/tts_manager.dart';
+import 'package:billy/tts/ttsState.dart';
+import 'package:billy/tts/tts_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';

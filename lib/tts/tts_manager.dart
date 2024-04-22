@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:billy/ttsState.dart';
+import 'package:billy/tts/ttsState.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter_tts/flutter_tts.dart';

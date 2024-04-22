@@ -1,4 +1,4 @@
-import 'package:billy/conversation_provider.dart';
+import 'package:billy/providers/conversation_provider.dart';
 
 import 'package:billy/persistent_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';

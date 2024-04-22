@@ -1,4 +1,4 @@
-import 'package:billy/llm_api_manager.dart';
+import 'package:billy/providers/llm_api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:billy/constant.dart';
 import 'package:provider/provider.dart';
