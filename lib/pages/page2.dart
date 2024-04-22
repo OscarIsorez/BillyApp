@@ -3,11 +3,9 @@ import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/conversation_provider.dart';
-import 'package:billy/components/text_bubble.dart';
 import 'package:billy/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:billy/pages/home_page.dart';
 
 class Page2 extends StatefulWidget {
   const Page2({super.key});

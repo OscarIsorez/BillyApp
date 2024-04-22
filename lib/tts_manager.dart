@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 import 'package:billy/ttsState.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TtsManager {
@@ -16,7 +15,6 @@ class TtsManager {
   bool isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
-  int? _inputLength;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -63,8 +61,4 @@ class TtsManager {
   Future _setAwaitOptions() async {
     await flutterTts.awaitSpeakCompletion(true);
   }
-
-
-
-
 }

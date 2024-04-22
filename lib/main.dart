@@ -1,7 +1,6 @@
 import 'package:billy/AppTheme/theme_provider.dart';
 import 'package:billy/AudioPlayerProvider.dart';
 import 'package:billy/conversation_provider.dart';
-import 'package:billy/constant.dart';
 import 'package:billy/firebase_options.dart';
 import 'package:billy/llm_api_manager.dart';
 import 'package:billy/pages/about_page.dart';
@@ -10,10 +9,6 @@ import 'package:billy/pages/home_page.dart';
 import 'package:billy/pages/premium_page.dart';
 import 'package:billy/pages/profile_page.dart';
 import 'package:billy/pages/settings_page.dart';
-import 'package:billy/templates/ConvTheme.dart';
-import 'package:billy/templates/Conversation.dart';
-import 'package:billy/templates/ConversationType.dart';
-import 'package:billy/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

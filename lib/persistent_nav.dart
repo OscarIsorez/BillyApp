@@ -1,14 +1,8 @@
-import 'package:billy/AppTheme/theme_provider.dart';
 import 'package:billy/pages/page1.dart';
 import 'package:billy/pages/page2.dart';
-import 'package:billy/pages/ConversationScreen.dart';
 import 'package:billy/pages/page3.dart';
-import 'package:billy/templates/ConvTheme.dart';
-import 'package:billy/templates/Conversation.dart';
-import 'package:billy/templates/ConversationType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PersistentTabScreen extends StatefulWidget {
   const PersistentTabScreen({Key? key}) : super(key: key);

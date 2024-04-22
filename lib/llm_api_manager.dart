@@ -1,15 +1,11 @@
 import 'package:billy/constant.dart';
-import 'package:billy/templates/ConvTheme.dart';
-import 'package:billy/templates/Conversation.dart';
-import 'package:billy/templates/ConversationType.dart';
-import 'package:billy/templates/Message.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LlmApiManager with ChangeNotifier {
   final String _baseUrl = 'https://api.mistral.ai/v1/chat/completions';
-  final String _apiKey = 'YOUR_API';
 
   String result = '';
   get results => result;

@@ -1,12 +1,8 @@
 import 'package:billy/conversation_provider.dart';
-import 'package:billy/components/text_bubble.dart';
-import 'package:billy/pages/page1.dart';
-import 'package:billy/pages/page2.dart';
-import 'package:billy/pages/ConversationScreen.dart';
+
 import 'package:billy/persistent_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -21,6 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late stt.SpeechToText _speech;
   late AnimationController _controller;
+  // ignore: unused_field
   bool _isListening = false;
 
   final user = FirebaseAuth.instance.currentUser!;
@@ -62,10 +59,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       );
     }
   }
-
-  int _currentIndex = 0;
-
-  final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {

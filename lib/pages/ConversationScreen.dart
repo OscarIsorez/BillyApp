@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:billy/AudioPlayerProvider.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:billy/templates/Message.dart';
@@ -7,13 +5,10 @@ import 'package:billy/conversation_provider.dart';
 import 'package:billy/components/text_bubble.dart';
 import 'package:billy/ttsState.dart';
 import 'package:billy/tts_manager.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:flutter/material.dart';
 
 class ConversationScreen extends StatefulWidget {
   const ConversationScreen({super.key, required Conversation conversation});
@@ -25,6 +20,7 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController _scrollController = ScrollController();
   final SpeechToText _speechToText = SpeechToText();
+  // ignore: unused_field
   bool _speechEnabled = false;
   String _lastWords = '';
   late TtsManager ttsManager;
@@ -36,7 +32,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   // bool isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
-  int? _inputLength;
 
   // TtsState ttsState = TtsState.stopped;
 

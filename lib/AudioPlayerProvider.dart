@@ -4,10 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 class AudioPlayerProvider extends ChangeNotifier {
   final AudioPlayer player = AudioPlayer();
   String asset = "interface-soft-click-131438.mp3";
-
-  Duration _currentDuration = Duration.zero;
-  Duration _totalDuration = Duration.zero;
-
+  // ignore: unused_field
   bool _isPlaying = false;
 
   void play() async {
