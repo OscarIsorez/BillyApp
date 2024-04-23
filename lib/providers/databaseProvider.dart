@@ -113,8 +113,6 @@ class Database with ChangeNotifier {
 
   // --------------------------------- USER ---------------------------------
   addUser(UserModel user) async {
-    // deletAllUsers();
-
     await _db.collection('Users').doc(uid).set(user.toJson());
     notifyListeners();
   }
@@ -125,6 +123,7 @@ class Database with ChangeNotifier {
     return UserModel(
       name: documentSnapshot['name'],
       email: documentSnapshot['email'],
+      themeChoosed: documentSnapshot['themeChoosed'],
     );
   }
 
@@ -151,19 +150,20 @@ class Database with ChangeNotifier {
 
   // --------------------------------- THEME ---------------------------------
 
-  Future<String> getTheme() async {
+  Future<String> getThemefromDB() async {
     CollectionReference users = _db.collection('Users');
     DocumentSnapshot documentSnapshot = await users.doc(uid).get();
     try {
-      return documentSnapshot['theme'];
+      return documentSnapshot['themeChoosed'];
     } catch (e) {
       return 'light';
     }
   }
 
-  Future<void> updateTheme(String theme) async {
+  void updateTheme(String theme) async {
     CollectionReference users = _db.collection('Users');
-    await users.doc(uid).update({'theme': theme});
-    print(theme);
+    await users.doc(uid).set({
+      'themeChoosed': theme,
+    }, SetOptions(merge: true));
   }
 }

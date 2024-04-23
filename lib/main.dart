@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Billy',
-        home: AuthPage(),
+        home: const AuthPage(),
         theme: Provider.of<ThemeProvider>(context).themeData,
         routes: {
           '/home': (context) => MainScreen(),

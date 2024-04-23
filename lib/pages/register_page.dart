@@ -48,8 +48,10 @@ class _RegisterPageState extends State<RegisterPage> {
               email: emailControler.text, password: passwordController.text);
 
       if (userCredential.user != null) {
-        Provider.of<Database>(context, listen: false).addUser(
-            UserModel(name: emailControler.text, email: emailControler.text));
+        Provider.of<Database>(context, listen: false).addUser(UserModel(
+            name: emailControler.text,
+            email: emailControler.text,
+            themeChoosed: 'light'));
       }
 
       if (mounted) {

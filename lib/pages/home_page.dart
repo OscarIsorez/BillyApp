@@ -34,6 +34,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _speech = stt.SpeechToText();
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 50));
+
+    Provider.of<ThemeProvider>(context, listen: false).setTheme(
+        Provider.of<Database>(context, listen: false).getThemefromDB());
   }
 
   Future<void> _startListening() async {

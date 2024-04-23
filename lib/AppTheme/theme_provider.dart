@@ -23,4 +23,14 @@ class ThemeProvider extends ChangeNotifier {
       themeData = dark_mode;
     }
   }
+
+  void setTheme(Future<String> theme) {
+    theme.then((value) {
+      if (value == "dark") {
+        themeData = dark_mode;
+      } else {
+        themeData = light_mode;
+      }
+    });
+  }
 }
