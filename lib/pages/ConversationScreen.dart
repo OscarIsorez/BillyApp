@@ -4,6 +4,7 @@ import 'package:billy/templates/Conversation.dart';
 import 'package:billy/templates/Message.dart';
 import 'package:billy/providers/conversation_provider.dart';
 import 'package:billy/components/text_bubble.dart';
+import 'package:billy/tts/ttsState.dart';
 import 'package:billy/tts/tts_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,16 +33,104 @@ class _ConversationScreenState extends State<ConversationScreen> {
     super.initState();
     ttsManager = TtsManager();
     _initSpeech();
+    initTts();
+  }
+
+  Future _getDefaultEngine() async {
+    var engine = await ttsManager.flutterTts.getDefaultEngine;
+    if (engine != null) {
+      print(engine);
+    }
+  }
+
+  Future _getDefaultVoice() async {
+    var voice = await ttsManager.flutterTts.getDefaultVoice;
+    if (voice != null) {
+      print(voice);
+    }
+  }
+
+  Future _setAwaitOptions() async {
+    await ttsManager.flutterTts.awaitSpeakCompletion(true);
+  }
+
+  Future _stop() async {
+    var result = await ttsManager.flutterTts.stop();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.stopped);
+  }
+
+  Future _pause() async {
+    var result = await ttsManager.flutterTts.pause();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.paused);
+  }
+
+  initTts() {
+    _setAwaitOptions();
+
+    if (ttsManager.isAndroid) {
+      _getDefaultEngine();
+      _getDefaultVoice();
+    }
+
+    ttsManager.flutterTts.setStartHandler(() {
+      setState(() {
+        print("Playing");
+        ttsManager.ttsState = TtsState.playing;
+      });
+    });
+
+    if (ttsManager.isAndroid) {
+      ttsManager.flutterTts.setInitHandler(() {
+        setState(() {
+          print("TTS Initialized");
+        });
+      });
+    }
+
+    ttsManager.flutterTts.setCompletionHandler(() {
+      setState(() {
+        print("Complete");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
+
+    ttsManager.flutterTts.setCancelHandler(() {
+      setState(() {
+        print("Cancel");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
+
+    ttsManager.flutterTts.setPauseHandler(() {
+      setState(() {
+        print("Paused");
+        ttsManager.ttsState = TtsState.paused;
+      });
+    });
+
+    ttsManager.flutterTts.setContinueHandler(() {
+      setState(() {
+        print("Continued");
+        ttsManager.ttsState = TtsState.continued;
+      });
+    });
+
+    ttsManager.flutterTts.setErrorHandler((msg) {
+      setState(() {
+        print("error: $msg");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
   }
 
   Future _speak() async {
+    _stopListening();
     await ttsManager.flutterTts.setVolume(ttsManager.volume);
     await ttsManager.flutterTts.setSpeechRate(ttsManager.rate);
     await ttsManager.flutterTts.setPitch(ttsManager.pitch);
 
     if (_newVoiceText != null) {
       if (_newVoiceText!.isNotEmpty) {
-        _stopListening();
         await ttsManager.flutterTts.speak(_newVoiceText!);
       }
     }
