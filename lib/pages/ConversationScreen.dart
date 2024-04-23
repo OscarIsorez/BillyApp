@@ -38,16 +38,30 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   Future _getDefaultEngine() async {
     var engine = await ttsManager.flutterTts.getDefaultEngine;
-    if (engine != null) {
-      print(engine);
-    }
   }
 
   Future _getDefaultVoice() async {
-    var voice = await ttsManager.flutterTts.getDefaultVoice;
-    if (voice != null) {
-      print(voice);
-    }
+    final voices = await ttsManager.flutterTts.getVoices;
+    var voice = voices.firstWhere(
+        (element) => element['name'] == ttsManager.language,
+        orElse: () => voices.first);
+
+    /* Map (2 items)
+      0:
+      "name" -> "es-us-x-sfb-local"
+      key:
+      "name"
+      value:
+      "es-us-x-sfb-local"
+      1:
+      "locale" -> "es-US"
+      key:
+      "locale"
+      value:
+      "es-US" */
+
+    voice = {'name': "es-us-x-sfb-local", 'locale': 'es-US'};
+    await ttsManager.flutterTts.setVoice(voice);
   }
 
   Future _setAwaitOptions() async {
@@ -69,14 +83,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
     if (ttsManager.isAndroid) {
       _getDefaultEngine();
+
       _getDefaultVoice();
     }
 
     ttsManager.flutterTts.setStartHandler(() {
-      setState(() {
-        print("Playing");
-        ttsManager.ttsState = TtsState.playing;
-      });
+      if (mounted) {
+        setState(() {
+          ttsManager.ttsState = TtsState.playing;
+        });
+      }
     });
 
     if (ttsManager.isAndroid) {
