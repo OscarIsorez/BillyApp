@@ -51,11 +51,11 @@ class _Page2State extends State<Page2> {
               key: Key(conversation.name),
               direction: DismissDirection.endToStart,
               onDismissed: (direction) {
+                Provider.of<Database>(context, listen: false)
+                    .deleteConversation(conversation);
                 setState(() {
                   conversations.removeAt(index);
                 });
-                Provider.of<Database>(context, listen: false)
-                    .deleteConversation(conversation);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("${conversation.name} dismissed")));

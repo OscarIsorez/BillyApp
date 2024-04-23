@@ -60,8 +60,8 @@ class _Page1State extends State<Page1> {
         (element) => element['name'] == ttsManager.language,
         orElse: () => voices.first);
 
-    voice = {'name': "es-us-x-sfb-local", 'locale': 'es-US'};
-    await ttsManager.flutterTts.setVoice(voice);
+    // voice = {'name': "es-us-x-sfb-local", 'locale': 'es-US'};
+    // await ttsManager.flutterTts.setVoice(voice);
   }
 
   Future _setAwaitOptions() async {
@@ -227,6 +227,54 @@ class _Page1State extends State<Page1> {
         child: GestureDetector(
           onTap: () async {
             _isAnimating = !_isAnimating;
+            if (Provider.of<ConversationProvider>(context, listen: false)
+                        .conversation
+                        .name ==
+                    'Temp ConversationName' ||
+                Provider.of<ConversationProvider>(context, listen: false)
+                        .conversation
+                        .name ==
+                    conversationNameController.text) {
+              _stopListening();
+              _stopSpeaking();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Conversation Name'),
+                    content: TextField(
+                      controller: conversationNameController,
+                      decoration: const InputDecoration(
+                        hintText: "Conversation Name",
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<ConversationProvider>(context,
+                                  listen: false)
+                              .conversation
+                              .setName(conversationNameController.text);
+                          Provider.of<Database>(context, listen: false).addConv(
+                            Provider.of<ConversationProvider>(context,
+                                    listen: false)
+                                .conversation,
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
             _streamController.add(_isAnimating);
 
             while (_isAnimating) {
@@ -237,9 +285,6 @@ class _Page1State extends State<Page1> {
                 _outerHeight = 240;
               });
 
-              // Provider.of<AudioPlayerProvider>(context, listen: false).play();
-
-              //  on crée une nouvelle conv dans le provider
               Provider.of<ConversationProvider>(context, listen: false)
                   .setConversation(Conversation(
                 name: 'Temp ConversationName',
@@ -247,58 +292,20 @@ class _Page1State extends State<Page1> {
                 messages: [],
               ));
 
-              //  on start listening to the user's voice si on n'est pas déjà en train de le faire ou si on n'est pas en traind e parler
-              if (!_speechToText.isListening && !ttsManager.isPlaying) {
+              if (!_speechToText.isListening &&
+                  !ttsManager.isPlaying &&
+                  _isAnimating) {
                 _startListening();
               }
-              //  we convert it into a conversation
 
               await Future.delayed(const Duration(milliseconds: 600));
               if (!_isAnimating) {
                 _stopListening();
                 _stopSpeaking();
 
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Conversation Name'),
-                      content: TextField(
-                        controller: conversationNameController,
-                        decoration: const InputDecoration(
-                          hintText: "Conversation Name",
-                        ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Provider.of<ConversationProvider>(context,
-                                    listen: false)
-                                .conversation
-                                .setName(conversationNameController.text);
-                            Provider.of<Database>(context, listen: false)
-                                .addConv(
-                              Provider.of<ConversationProvider>(context,
-                                      listen: false)
-                                  .conversation,
-                            );
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Save'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-
                 break;
               }
+
               setState(() {
                 _width = 200;
                 _height = 200;
