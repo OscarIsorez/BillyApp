@@ -46,20 +46,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
         (element) => element['name'] == ttsManager.language,
         orElse: () => voices.first);
 
-    /* Map (2 items)
-      0:
-      "name" -> "es-us-x-sfb-local"
-      key:
-      "name"
-      value:
-      "es-us-x-sfb-local"
-      1:
-      "locale" -> "es-US"
-      key:
-      "locale"
-      value:
-      "es-US" */
-
     voice = {'name': "es-us-x-sfb-local", 'locale': 'es-US'};
     await ttsManager.flutterTts.setVoice(voice);
   }
