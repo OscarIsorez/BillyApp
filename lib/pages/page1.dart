@@ -1,10 +1,17 @@
 import 'package:billy/providers/AudioPlayerProvider.dart';
+import 'package:billy/providers/conversation_provider.dart';
+import 'package:billy/templates/Message.dart';
+import 'package:billy/tts/ttsState.dart';
+import 'package:billy/tts/tts_manager.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class Page1 extends StatefulWidget {
   Page1({Key? key})
@@ -23,6 +30,182 @@ class _Page1State extends State<Page1> {
   bool _isAnimating = false;
   StreamController<bool> _streamController = StreamController<bool>();
   final user = FirebaseAuth.instance.currentUser!;
+
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  late TtsManager ttsManager;
+  String? _newVoiceText;
+
+  @override
+  void initState() {
+    super.initState();
+    ttsManager = TtsManager();
+    _initSpeech();
+    initTts();
+  }
+
+//  --------------------------------- TTS AND STT---------------------------------
+  Future _getDefaultEngine() async {
+    var engine = await ttsManager.flutterTts.getDefaultEngine;
+  }
+
+  Future _getDefaultVoice() async {
+    final voices = await ttsManager.flutterTts.getVoices;
+    var voice = voices.firstWhere(
+        (element) => element['name'] == ttsManager.language,
+        orElse: () => voices.first);
+
+    voice = {'name': "es-us-x-sfb-local", 'locale': 'es-US'};
+    await ttsManager.flutterTts.setVoice(voice);
+  }
+
+  Future _setAwaitOptions() async {
+    await ttsManager.flutterTts.awaitSpeakCompletion(true);
+  }
+
+  Future _stop() async {
+    var result = await ttsManager.flutterTts.stop();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.stopped);
+  }
+
+  Future _pause() async {
+    var result = await ttsManager.flutterTts.pause();
+    if (result == 1) setState(() => ttsManager.ttsState = TtsState.paused);
+  }
+
+  initTts() {
+    _setAwaitOptions();
+
+    if (ttsManager.isAndroid) {
+      _getDefaultEngine();
+
+      _getDefaultVoice();
+    }
+
+    ttsManager.flutterTts.setStartHandler(() {
+      if (mounted) {
+        setState(() {
+          ttsManager.ttsState = TtsState.playing;
+        });
+      }
+    });
+
+    if (ttsManager.isAndroid) {
+      ttsManager.flutterTts.setInitHandler(() {
+        setState(() {
+          print("TTS Initialized");
+        });
+      });
+    }
+
+    ttsManager.flutterTts.setCompletionHandler(() {
+      setState(() {
+        print("Complete");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
+
+    ttsManager.flutterTts.setCancelHandler(() {
+      setState(() {
+        print("Cancel");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
+
+    ttsManager.flutterTts.setPauseHandler(() {
+      setState(() {
+        print("Paused");
+        ttsManager.ttsState = TtsState.paused;
+      });
+    });
+
+    ttsManager.flutterTts.setContinueHandler(() {
+      setState(() {
+        print("Continued");
+        ttsManager.ttsState = TtsState.continued;
+      });
+    });
+
+    ttsManager.flutterTts.setErrorHandler((msg) {
+      setState(() {
+        print("error: $msg");
+        ttsManager.ttsState = TtsState.stopped;
+      });
+    });
+  }
+
+  Future _speak() async {
+    _stopListening();
+    await ttsManager.flutterTts.setVolume(ttsManager.volume);
+    await ttsManager.flutterTts.setSpeechRate(ttsManager.rate);
+    await ttsManager.flutterTts.setPitch(ttsManager.pitch);
+
+    if (_newVoiceText != null) {
+      if (_newVoiceText!.isNotEmpty) {
+        await ttsManager.flutterTts.speak(_newVoiceText!);
+      }
+    }
+  }
+
+  void _onChange(String text) {
+    setState(() {
+      _newVoiceText = text;
+    });
+  }
+
+  /// This has to happen only once per app
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  _stopSpeaking() async {
+    await ttsManager.flutterTts.stop();
+  }
+
+  /// Each time to start a speech recognition session
+  void _startListening() async {
+    Provider.of<AudioPlayerProvider>(context, listen: false).play();
+    await _speechToText.listen(
+      onResult: (SpeechRecognitionResult result) {
+        if (result.finalResult) {
+          _onSpeechResult(result);
+        }
+      },
+    );
+
+    if (mounted) setState(() {});
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() async {
+      if (result.recognizedWords.isNotEmpty) {
+        Provider.of<ConversationProvider>(context, listen: false)
+            .addMessage(result.recognizedWords);
+        await Provider.of<ConversationProvider>(context, listen: false)
+            .fetchResponse();
+        Message? _newVoiceText =
+            Provider.of<ConversationProvider>(context, listen: false)
+                .getLastMessage();
+        _onChange(_newVoiceText!.content);
+        await _speak();
+        _startListening();
+      }
+    });
+  }
+
+  // --------------------------------- BUILD---------------------------------
 
   @override
   void dispose() {

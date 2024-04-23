@@ -20,12 +20,10 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController _scrollController = ScrollController();
-  final SpeechToText _speechToText = SpeechToText();
-  // ignore: unused_field
-  bool _speechEnabled = false;
-  String _lastWords = '';
-  late TtsManager ttsManager;
 
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  late TtsManager ttsManager;
   String? _newVoiceText;
 
   @override
@@ -36,6 +34,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     initTts();
   }
 
+//  --------------------------------- TTS AND STT---------------------------------
   Future _getDefaultEngine() async {
     var engine = await ttsManager.flutterTts.getDefaultEngine;
   }
@@ -181,10 +180,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() async {
-      _lastWords = result.recognizedWords;
-      if (_lastWords.isNotEmpty) {
+      if (result.recognizedWords.isNotEmpty) {
         Provider.of<ConversationProvider>(context, listen: false)
-            .addMessage(_lastWords);
+            .addMessage(result.recognizedWords);
         await Provider.of<ConversationProvider>(context, listen: false)
             .fetchResponse();
         Message? _newVoiceText =
@@ -196,6 +194,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
       }
     });
   }
+
+  // ---------------------------------BUILD PART---------------------------------
 
   @override
   Widget build(BuildContext context) {
