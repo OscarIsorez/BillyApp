@@ -3,12 +3,10 @@
 import 'package:billy/components/my_button.dart';
 import 'package:billy/components/my_text_field.dart';
 import 'package:billy/components/square_tile.dart';
-import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -38,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
         email: emailControler.text,
         password: passwordController.text,
       );
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(e.code);
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               MyTextField(
                 controller: emailControler,
-                hintText: 'Useeeername',
+                hintText: 'Email',
                 tohide: false,
               ),
               const SizedBox(height: 20),

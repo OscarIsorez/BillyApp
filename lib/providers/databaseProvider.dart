@@ -24,9 +24,17 @@ class Database with ChangeNotifier {
         .collection('ConvList') // Access the 'Conversations' sub-collection
         .get();
 
-    return querySnapshot.docs
-        .map((doc) => Conversation.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+    List<Conversation> convList = [];
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      print(doc.data());
+      convList.add(
+          // Add the conversation to the list
+          Conversation.fromJson(
+              // Create a new Conversation object from the document
+              doc.data() as Map<String, dynamic>));
+    }
+
+    return convList;
   }
 
   Future<int> getConvListSize() async {
@@ -35,7 +43,7 @@ class Database with ChangeNotifier {
         .doc(uid) // Use the user's ID
         .collection('ConvList') // Access the 'Conversations' sub-collection
         .get();
-
+    notifyListeners();
     return querySnapshot.docs.length;
   }
 
@@ -51,20 +59,28 @@ class Database with ChangeNotifier {
         .then((doc) => doc.exists)) {
       return;
     }
+
     await users
         .doc(uid) // Use the user's ID
         .collection('ConvList')
         .add(conversation.toJson());
+
+    notifyListeners();
   }
 
   Future<void> updateConversation(Conversation conversation) async {
     CollectionReference users = _db.collection('Users');
-    await users
+    QuerySnapshot querySnapshot = await users
         .doc(uid) // Use the user's ID
         .collection('ConvList') // Access the 'Conversations' sub-collection
-        .doc(
-            conversation.name) // Use the conversation's name as the document ID
-        .update(conversation.toJson());
+        .get();
+
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      if (doc['name'] == conversation.name) {
+        await doc.reference.update(conversation.toJson());
+      }
+    }
+    notifyListeners();
   }
 
   Future<void> deleteConversation(Conversation conversation) async {
@@ -79,6 +95,7 @@ class Database with ChangeNotifier {
         await doc.reference.delete();
       }
     }
+    notifyListeners();
   }
 
   Future<void> deleteAllConversations() async {
@@ -91,15 +108,15 @@ class Database with ChangeNotifier {
     for (DocumentSnapshot doc in querySnapshot.docs) {
       await doc.reference.delete();
     }
+    notifyListeners();
   }
 
+  // --------------------------------- USER ---------------------------------
   addUser(UserModel user) async {
-    await _db
-        .collection('Users')
-        .doc(uid)
-        .set(user.toJson())
-        .whenComplete(() => print(user.name + ' added to database'))
-        .catchError((error) => print('Failed to add user: $error'));
+    // deletAllUsers();
+
+    await _db.collection('Users').doc(uid).set(user.toJson());
+    notifyListeners();
   }
 
   Future<UserModel> getUser() async {
@@ -114,10 +131,39 @@ class Database with ChangeNotifier {
   Future<void> updateUser(UserModel user) async {
     CollectionReference users = _db.collection('Users');
     await users.doc(uid).update(user.toJson());
+    notifyListeners();
   }
 
   Future<void> deleteUser() async {
     CollectionReference users = _db.collection('Users');
     await users.doc(uid).delete();
+    notifyListeners();
+  }
+
+  Future<void> deletAllUsers() async {
+    CollectionReference users = _db.collection('Users');
+    QuerySnapshot querySnapshot = await users.get();
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+    notifyListeners();
+  }
+
+  // --------------------------------- THEME ---------------------------------
+
+  Future<String> getTheme() async {
+    CollectionReference users = _db.collection('Users');
+    DocumentSnapshot documentSnapshot = await users.doc(uid).get();
+    try {
+      return documentSnapshot['theme'];
+    } catch (e) {
+      return 'light';
+    }
+  }
+
+  Future<void> updateTheme(String theme) async {
+    CollectionReference users = _db.collection('Users');
+    await users.doc(uid).update({'theme': theme});
+    print(theme);
   }
 }

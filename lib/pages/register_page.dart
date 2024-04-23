@@ -42,12 +42,15 @@ class _RegisterPageState extends State<RegisterPage> {
         showErrorMessage('Passwords do not match');
         return;
       }
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailControler.text,
-        password: passwordController.text,
-      );
-      Provider.of<Database>(context, listen: false).addUser(
-          UserModel(name: emailControler.text, email: emailControler.text));
+
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailControler.text, password: passwordController.text);
+
+      if (userCredential.user != null) {
+        Provider.of<Database>(context, listen: false).addUser(
+            UserModel(name: emailControler.text, email: emailControler.text));
+      }
 
       if (mounted) {
         Navigator.pop(context);

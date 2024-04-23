@@ -2,38 +2,41 @@ import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Message.dart';
 
 class Conversation {
-  List<Message> _messages = [];
+  List<Message> messages;
   final String name;
   final ConvTheme theme;
 
   // Constructor
-  Conversation({required this.name, required this.theme});
+  Conversation({
+    required this.name,
+    required this.theme,
+    required this.messages,
+  });
 
   // Get the list of messages
-  List<Message> get messages => _messages;
 
   // Add a message to the conversation
   void addMessage(Message message) {
-    _messages.add(message);
+    messages.add(message);
   }
 
   Message? getLastMessage() {
-    if (_messages.isEmpty) {
+    if (messages.isEmpty) {
       return null;
     }
-    return _messages.last;
+    return messages.last;
   }
 
   SenderType? getLastSender() {
-    if (_messages.isEmpty) {
+    if (messages.isEmpty) {
       return null;
     }
-    return _messages.last.sender;
+    return messages.last.sender;
   }
 
   String getHistory() {
-    return _messages.map((message) {
-      return '${message.timestamp}: ${message.sender} - ${message.content}';
+    return messages.map((message) {
+      return '${message.sender} - ${message.content}';
     }).join('\n');
   }
 
@@ -41,16 +44,18 @@ class Conversation {
     return {
       'name': name,
       'theme': theme.toString(),
-      'messages': _messages.map((message) => message.toJson()).toList(),
+      'messages': messages.map((message) => message.toJson()).toList(),
     };
   }
 
-  factory Conversation.fromJson(Map<String, dynamic> json) {
+  static fromJson(Map<String, dynamic> json) {
     return Conversation(
       name: json['name'],
       theme: ConvTheme.fromString(json['theme']),
-    ).._messages = (json['messages'] as List)
-        .map((message) => Message.fromJson(message))
-        .toList();
+      messages: (json['messages'] as List)
+          .map<Message>((dynamic message) =>
+              Message.fromJson(message as Map<String, dynamic>))
+          .toList(),
+    );
   }
 }

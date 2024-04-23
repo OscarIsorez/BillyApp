@@ -1,9 +1,5 @@
-import 'package:billy/pages/UserModel.dart';
 import 'package:billy/providers/AudioPlayerProvider.dart';
-import 'package:billy/providers/databaseProvider.dart';
-import 'package:billy/templates/ConvTheme.dart';
-import 'package:billy/templates/Conversation.dart';
-import 'package:billy/templates/ConversationType.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -75,7 +71,7 @@ class _Page1State extends State<Page1> {
                   width: _outerWidth,
                   height: _outerHeight,
                   decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                     shape: BoxShape.circle,
                   ),
                   duration: const Duration(milliseconds: 500),
@@ -83,8 +79,8 @@ class _Page1State extends State<Page1> {
                     child: AnimatedContainer(
                       width: _width,
                       height: _height,
-                      decoration: const BoxDecoration(
-                        color: Colors.deepPurpleAccent,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                       ),
                       duration: const Duration(seconds: 1),

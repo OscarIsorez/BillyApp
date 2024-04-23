@@ -10,6 +10,7 @@ class ConversationProvider with ChangeNotifier {
   Conversation conversation = Conversation(
     name: 'Test Conversation',
     theme: ConvTheme(type: ConversationType.Normal),
+    messages: [],
   );
 
   List<Message> get messages => conversation.messages;
@@ -23,10 +24,7 @@ class ConversationProvider with ChangeNotifier {
   void addMessage(String message) {
     conversation.messages.add(
       Message(
-        sender: SenderType.user,
-        content: message,
-        timestamp: DateTime.now(),
-      ),
+          sender: SenderType.user, content: message),
     );
     notifyListeners();
   }

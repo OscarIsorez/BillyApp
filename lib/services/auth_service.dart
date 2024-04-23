@@ -15,7 +15,5 @@ class AuthService {
 
     //  on recupere le nom et le mail de l'utilisateur
     final user = await FirebaseAuth.instance.signInWithCredential(credential);
-    print('user name: ${user.user!.displayName}');
-    print('user email: ${user.user!.email}');
   }
 }

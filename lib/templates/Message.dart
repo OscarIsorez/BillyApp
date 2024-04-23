@@ -1,20 +1,17 @@
 class Message {
   final SenderType sender;
   final String content;
-  final DateTime timestamp;
 
-  Message(
-      {required this.sender, required this.content, required this.timestamp});
+  Message({required this.sender, required this.content});
 
   toJson() {
     return {
       'sender': senderTypeToString,
       'content': content,
-      'timestamp': timestamp,
     };
   }
 
-  factory Message.fromJson(Map<String, dynamic> json) {
+  static fromJson(Map<String, dynamic> json) {
     return Message(
       sender: json['sender'] == 'user'
           ? SenderType.user
@@ -22,7 +19,6 @@ class Message {
               ? SenderType.system
               : SenderType.bot,
       content: json['content'],
-      timestamp: json['timestamp'],
     );
   }
 

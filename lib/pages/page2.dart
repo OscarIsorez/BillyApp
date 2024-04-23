@@ -129,12 +129,15 @@ class _Page2State extends State<Page2> {
                           Conversation(
                             name: nameController.text,
                             theme: selectedTheme,
+                            messages: [],
                           ),
                         );
                       });
                       Provider.of<Database>(context, listen: false).addConv(
                           Conversation(
-                              name: nameController.text, theme: selectedTheme));
+                              name: nameController.text,
+                              theme: selectedTheme,
+                              messages: []));
                       Navigator.of(context).pop();
                       nameController.clear();
                     },

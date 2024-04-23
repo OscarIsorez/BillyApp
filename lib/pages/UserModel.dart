@@ -11,6 +11,7 @@ class UserModel {
     return {
       'name': name,
       'email': email,
+      'theme': 'light',
     };
   }
 }

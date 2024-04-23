@@ -1,4 +1,5 @@
 import 'package:billy/AppTheme/theme_provider.dart';
+import 'package:billy/providers/databaseProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ class SettingsPage extends StatelessWidget {
                       onChanged: (value) {
                         Provider.of<ThemeProvider>(context, listen: false)
                             .toggleTheme();
+
+                        Provider.of<Database>(context, listen: false)
+                            .updateTheme(value ? "dark" : "light");
                       })
                 ]),
           ),
