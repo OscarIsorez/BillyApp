@@ -3,8 +3,12 @@ import 'package:billy/templates/Message.dart';
 
 class Conversation {
   List<Message> messages;
-  final String name;
+  String name;
   final ConvTheme theme;
+
+  setName(String name) {
+    this.name = name;
+  }
 
   // Constructor
   Conversation({

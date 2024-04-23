@@ -1,5 +1,9 @@
 import 'package:billy/providers/AudioPlayerProvider.dart';
 import 'package:billy/providers/conversation_provider.dart';
+import 'package:billy/providers/databaseProvider.dart';
+import 'package:billy/templates/ConvTheme.dart';
+import 'package:billy/templates/Conversation.dart';
+import 'package:billy/templates/ConversationType.dart';
 import 'package:billy/templates/Message.dart';
 import 'package:billy/tts/ttsState.dart';
 import 'package:billy/tts/tts_manager.dart';
@@ -29,6 +33,7 @@ class _Page1State extends State<Page1> {
   double _outerHeight = 220;
   bool _isAnimating = false;
   StreamController<bool> _streamController = StreamController<bool>();
+  TextEditingController conversationNameController = TextEditingController();
   final user = FirebaseAuth.instance.currentUser!;
 
   final SpeechToText _speechToText = SpeechToText();
@@ -232,9 +237,66 @@ class _Page1State extends State<Page1> {
                 _outerHeight = 240;
               });
 
-              Provider.of<AudioPlayerProvider>(context, listen: false).play();
+              // Provider.of<AudioPlayerProvider>(context, listen: false).play();
+
+              //  on crée une nouvelle conv dans le provider
+              Provider.of<ConversationProvider>(context, listen: false)
+                  .setConversation(Conversation(
+                name: 'Temp ConversationName',
+                theme: ConvTheme(type: ConversationType.Normal),
+                messages: [],
+              ));
+
+              //  on start listening to the user's voice si on n'est pas déjà en train de le faire ou si on n'est pas en traind e parler
+              if (!_speechToText.isListening && !ttsManager.isPlaying) {
+                _startListening();
+              }
+              //  we convert it into a conversation
+
               await Future.delayed(const Duration(milliseconds: 600));
               if (!_isAnimating) {
+                _stopListening();
+                _stopSpeaking();
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Conversation Name'),
+                      content: TextField(
+                        controller: conversationNameController,
+                        decoration: const InputDecoration(
+                          hintText: "Conversation Name",
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<ConversationProvider>(context,
+                                    listen: false)
+                                .conversation
+                                .setName(conversationNameController.text);
+                            Provider.of<Database>(context, listen: false)
+                                .addConv(
+                              Provider.of<ConversationProvider>(context,
+                                      listen: false)
+                                  .conversation,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Save'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
                 break;
               }
               setState(() {
@@ -254,7 +316,7 @@ class _Page1State extends State<Page1> {
                   width: _outerWidth,
                   height: _outerHeight,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: Colors.blue[100],
                     shape: BoxShape.circle,
                   ),
                   duration: const Duration(milliseconds: 500),
@@ -263,7 +325,10 @@ class _Page1State extends State<Page1> {
                       width: _width,
                       height: _height,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        // rouge, il faut parler , bleu il faut écouter
+                        color: _speechToText.isNotListening
+                            ? Colors.blue
+                            : Colors.red,
                         shape: BoxShape.circle,
                       ),
                       duration: const Duration(seconds: 1),
