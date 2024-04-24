@@ -186,7 +186,7 @@ class _Page1State extends State<Page1> {
   /// Note that there are also timeouts that each platform enforces
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
-  void _stopListening() async {
+  _stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
@@ -205,7 +205,6 @@ class _Page1State extends State<Page1> {
                 .getLastMessage();
         _onChange(_newVoiceText!.content);
         await _speak();
-        _startListening();
       }
     });
   }
@@ -227,55 +226,17 @@ class _Page1State extends State<Page1> {
         child: GestureDetector(
           onTap: () async {
             _isAnimating = !_isAnimating;
-            if (Provider.of<ConversationProvider>(context, listen: false)
-                        .conversation
-                        .name ==
-                    'Temp ConversationName' ||
-                Provider.of<ConversationProvider>(context, listen: false)
-                        .conversation
-                        .name ==
-                    conversationNameController.text) {
-              _stopListening();
-              _stopSpeaking();
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Conversation Name'),
-                    content: TextField(
-                      controller: conversationNameController,
-                      decoration: const InputDecoration(
-                        hintText: "Conversation Name",
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Provider.of<ConversationProvider>(context,
-                                  listen: false)
-                              .conversation
-                              .setName(conversationNameController.text);
-                          Provider.of<Database>(context, listen: false).addConv(
-                            Provider.of<ConversationProvider>(context,
-                                    listen: false)
-                                .conversation,
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Save'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
+
             _streamController.add(_isAnimating);
+
+            if (_isAnimating) {
+              Provider.of<ConversationProvider>(context, listen: false)
+                  .setConversation(Conversation(
+                name: 'Temp ConversationName',
+                theme: ConvTheme(type: ConversationType.Normal),
+                messages: [],
+              ));
+            }
 
             while (_isAnimating) {
               setState(() {
@@ -284,13 +245,6 @@ class _Page1State extends State<Page1> {
                 _outerWidth = 240;
                 _outerHeight = 240;
               });
-
-              Provider.of<ConversationProvider>(context, listen: false)
-                  .setConversation(Conversation(
-                name: 'Temp ConversationName',
-                theme: ConvTheme(type: ConversationType.Normal),
-                messages: [],
-              ));
 
               if (!_speechToText.isListening &&
                   !ttsManager.isPlaying &&
@@ -302,8 +256,45 @@ class _Page1State extends State<Page1> {
               if (!_isAnimating) {
                 _stopListening();
                 _stopSpeaking();
-
-                break;
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Conversation Name'),
+                      content: TextField(
+                        controller: conversationNameController,
+                        decoration: const InputDecoration(
+                          hintText: "Conversation Name",
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<ConversationProvider>(context,
+                                    listen: false)
+                                .conversation
+                                .setName(conversationNameController.text);
+                            Provider.of<Database>(context, listen: false)
+                                .addConv(
+                              Provider.of<ConversationProvider>(context,
+                                      listen: false)
+                                  .conversation,
+                            );
+                            conversationNameController.clear();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Save'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
 
               setState(() {
@@ -314,6 +305,9 @@ class _Page1State extends State<Page1> {
               });
               await Future.delayed(const Duration(milliseconds: 600));
             }
+            // if () {
+            await _stopListening();
+            await _stopSpeaking();
           },
           child: StreamBuilder<bool>(
               stream: _streamController.stream,
