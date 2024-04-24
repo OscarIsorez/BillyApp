@@ -1,7 +1,10 @@
-
 import 'package:billy/constant.dart';
 import 'package:billy/templates/ConversationType.dart';
 
+/// Returns a string representation of the [ConvTheme] type.
+///
+/// The object is constructed with a [ConversationType] type, and the [sysPrompt] field is set
+/// ex : ConvTheme(type: ConversationType.Normal) , sysPrompt = Constants.noThemePrompt
 class ConvTheme {
   final ConversationType type;
   late String sysPrompt;
@@ -12,7 +15,7 @@ class ConvTheme {
 
   String getSysPrompt() {
     switch (type) {
-      case ConversationType.Normal:
+      case ConversationType.noTheme:
         return Constants.noThemePrompt;
       case ConversationType.Bakery:
         return Constants.bakeryPrompt;
@@ -29,7 +32,7 @@ class ConvTheme {
   /// value of the [type] field.
   String toString() {
     switch (type) {
-      case ConversationType.Normal:
+      case ConversationType.noTheme:
         return 'Normal';
       case ConversationType.Bakery:
         return 'Bakery';
@@ -50,17 +53,17 @@ class ConvTheme {
   ///
   /// The string can be one of 'Normal', 'Bakery', or 'Bank', and the corresponding [ConvTheme] instance
   /// will be returned. If the string does not match any of the valid types, a [ConvTheme] instance
-  /// with the [ConversationType.Normal] type will be returned.
+  /// with the [ConversationType.noTheme] type will be returned.
   static ConvTheme fromString(String type) {
     switch (type) {
       case 'Normal':
-        return ConvTheme(type: ConversationType.Normal);
+        return ConvTheme(type: ConversationType.noTheme);
       case 'Bakery':
         return ConvTheme(type: ConversationType.Bakery);
       case 'Bank':
         return ConvTheme(type: ConversationType.Bank);
       default:
-        return ConvTheme(type: ConversationType.Normal);
+        return ConvTheme(type: ConversationType.noTheme);
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:billy/pages/UserModel.dart';
+import 'package:billy/templates/UserModel.dart';
 import 'package:billy/templates/Conversation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

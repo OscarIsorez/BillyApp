@@ -4,24 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class LlmApiManager with ChangeNotifier {
+class LlmApiManager {
   final String _baseUrl = 'https://api.mistral.ai/v1/chat/completions';
 
   String result = '';
-  get results => result;
 
-  /// Gets the response from the LLM API for the given message.
-  ///
-  /// This method sends the provided message to the LLM API using the [sendMessage] method, and returns the response received from the API.
-  ///
-  /// Parameters:
-  /// - `message`: The message to send to the LLM API.
-  ///
-  /// Returns:
-  /// The response received from the LLM API.
-  Future<String> getResponse(String message) async {
-    await sendMessage('You are an helpful assistant', message);
-    return result;
+  String showResult(String message) {
+    getCorrectedMessage(message);
+    String tmp = result;
+    result = '';
+    return tmp;
   }
 
   /// Corrects a message by sending it to the LLM API and returning the result.
@@ -33,10 +25,12 @@ class LlmApiManager with ChangeNotifier {
   ///
   /// Returns:
   /// The corrected message from the LLM API response.
-  Future<String> correctMessage(String message) async {
+  Future<String> getCorrectedMessage(String message) async {
     String correctionSystemPrompt = Constants.correctionSystemPrompt;
-    sendMessage(correctionSystemPrompt, message);
-    return result;
+    String correctedMessage =
+        await sendMessage(correctionSystemPrompt, message);
+
+    return correctedMessage;  
   }
 
   /// Sends a message to the LLM API and updates the result.
@@ -45,7 +39,7 @@ class LlmApiManager with ChangeNotifier {
   ///
   /// Parameters:
   /// - `message`: The message to send to the LLM API.
-  Future<void> sendMessage(String systemPrompt, String message) async {
+  Future<String> sendMessage(String systemPrompt, String message) async {
     final url = _baseUrl;
     final response = await http.post(
       Uri.parse(url),
@@ -66,9 +60,9 @@ class LlmApiManager with ChangeNotifier {
 
     if (response.statusCode == 200) {
       result = jsonDecode(response.body)['choices'][0]['message']['content'];
-      notifyListeners();
     } else {
       result = 'Failed to send message';
     }
+    return result;
   }
 }

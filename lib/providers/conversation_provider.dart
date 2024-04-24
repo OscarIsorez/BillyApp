@@ -9,7 +9,7 @@ import 'dart:convert';
 class ConversationProvider with ChangeNotifier {
   Conversation conversation = Conversation(
     name: 'Test Conversation',
-    theme: ConvTheme(type: ConversationType.Normal),
+    theme: ConvTheme(type: ConversationType.noTheme),
     messages: [],
   );
 
@@ -23,8 +23,7 @@ class ConversationProvider with ChangeNotifier {
 
   void addMessage(String message) {
     conversation.messages.add(
-      Message(
-          sender: SenderType.user, content: message),
+      Message(sender: SenderType.user, content: message),
     );
     notifyListeners();
   }

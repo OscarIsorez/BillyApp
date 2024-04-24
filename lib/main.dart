@@ -26,7 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => ConversationProvider()),
         ChangeNotifierProvider(create: (context) => AudioPlayerProvider()),
-        ChangeNotifierProvider(create: (context) => LlmApiManager()),
+        // ChangeNotifierProvider(create: (context) => LlmApiManager()),
         ChangeNotifierProvider(create: (context) => Database()),
       ],
       child: const MyApp(),
@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Billy',

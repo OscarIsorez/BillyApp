@@ -1,1 +1,1 @@
-enum ConversationType { Normal, Bakery, Bank }
+enum ConversationType { noTheme, Bakery, Bank }

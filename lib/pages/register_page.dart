@@ -3,7 +3,7 @@
 import 'package:billy/components/my_button.dart';
 import 'package:billy/components/my_text_field.dart';
 import 'package:billy/components/square_tile.dart';
-import 'package:billy/pages/UserModel.dart';
+import 'package:billy/templates/UserModel.dart';
 import 'package:billy/providers/databaseProvider.dart';
 import 'package:billy/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';

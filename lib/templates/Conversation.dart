@@ -1,6 +1,7 @@
 import 'package:billy/templates/ConvTheme.dart';
 import 'package:billy/templates/Message.dart';
 
+
 class Conversation {
   List<Message> messages;
   String name;

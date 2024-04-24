@@ -8,14 +8,14 @@ import 'package:billy/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Page2 extends StatefulWidget {
-  const Page2({super.key});
+class Page3 extends StatefulWidget {
+  const Page3({super.key});
 
   @override
-  State<Page2> createState() => _Page2State();
+  State<Page3> createState() => _Page3State();
 }
 
-class _Page2State extends State<Page2> {
+class _Page3State extends State<Page3> {
   //  une liste de themes
   ConvTheme selectedTheme = Constants.convThemes[0];
 

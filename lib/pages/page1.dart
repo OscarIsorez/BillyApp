@@ -233,7 +233,7 @@ class _Page1State extends State<Page1> {
               Provider.of<ConversationProvider>(context, listen: false)
                   .setConversation(Conversation(
                 name: 'Temp ConversationName',
-                theme: ConvTheme(type: ConversationType.Normal),
+                theme: ConvTheme(type: ConversationType.noTheme),
                 messages: [],
               ));
             }

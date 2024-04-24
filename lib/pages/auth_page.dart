@@ -1,4 +1,4 @@
-import 'package:billy/pages/UserModel.dart';
+import 'package:billy/templates/UserModel.dart';
 import 'package:billy/pages/home_page.dart';
 import 'package:billy/pages/login_or_register_page.dart';
 import 'package:billy/providers/databaseProvider.dart';

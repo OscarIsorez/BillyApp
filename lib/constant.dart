@@ -21,14 +21,14 @@ class Constants {
       """In this task, your goal is to generate a corrected version of a message that will be concatenated to these instructions.
        You should make corrections if the message is not in English or if it contains errors in syntax or grammar.
         Do not provide any explanation of your reasoning. Just ensure that the corrected message is grammatically correct and written in English.
-         Thank you for your participation!""";
+        if the message is already correct, you should not make any changes. Thank you for your participation!""";
 
   static Color SenderTextColor = Color(0xFF5381A7);
   static Color ReceiverTextColor = Color.fromARGB(255, 212, 111, 111);
 
   static List<ConvTheme> convThemes = [
     //  type : normal, sysPrompt le contenu du fichier lib\prompts\no_theme.txt
-    ConvTheme(type: ConversationType.Normal),
+    ConvTheme(type: ConversationType.noTheme),
     ConvTheme(type: ConversationType.Bakery),
     ConvTheme(type: ConversationType.Bank)
   ];

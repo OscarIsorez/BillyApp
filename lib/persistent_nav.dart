@@ -28,7 +28,7 @@ class _PersistentTabScreenState extends State<PersistentTabScreen> {
   }
 
   List<Widget> _buildScreens() {
-    return [Page1(), Page3(), Page2()];
+    return [Page1(), Page2(), Page3()];
   }
 
   void _onPageChanged(int index) {

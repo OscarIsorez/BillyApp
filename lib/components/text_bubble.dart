@@ -45,7 +45,7 @@ class TextBubble extends StatelessWidget {
               if (isSender)
                 IconButton(
                   onPressed: () {
-                    // on ouvre un dialog avec les details du message
+                    final llmanager = LlmApiManager();
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -56,25 +56,30 @@ class TextBubble extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Original Message: $message'),
+                              Text('Original message: $message'),
                               const SizedBox(height: 8.0),
                               FutureBuilder<String>(
-                                future: Provider.of<LlmApiManager>(context)
-                                    .correctMessage(message),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
+                                future: llmanager.getCorrectedMessage(message),
+                                builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else {
-                                    if (snapshot.hasError)
-                                      return Text('Error: ${snapshot.error}');
-                                    else
-                                      return Text(
-                                          'Corrected Message: ${snapshot.data}'); // snapshot.data contains the result
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
                                   }
+                                  if (snapshot.hasError) {
+                                    return Text(
+                                      'Error: ${snapshot.error}',
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                  return Text(
+                                    'Corrected message: ${snapshot.data}',
+                                  );
                                 },
-                              )
+                              ),
                             ],
                           ),
                           actions: [
