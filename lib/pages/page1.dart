@@ -205,6 +205,7 @@ class _Page1State extends State<Page1> {
                 .getLastMessage();
         _onChange(_newVoiceText!.content);
         await _speak();
+        _startListening();
       }
     });
   }
@@ -236,6 +237,50 @@ class _Page1State extends State<Page1> {
                 theme: ConvTheme(type: ConversationType.noTheme),
                 messages: [],
               ));
+              _speechToText.isNotListening
+                  ? _startListening()
+                  : _stopListening();
+            } else {
+              _stopListening();
+              _stopSpeaking();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Conversation Name'),
+                    content: TextField(
+                      controller: conversationNameController,
+                      decoration: const InputDecoration(
+                        hintText: "Conversation Name",
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<ConversationProvider>(context,
+                                  listen: false)
+                              .conversation
+                              .setName(conversationNameController.text);
+                          Provider.of<Database>(context, listen: false).addConv(
+                            Provider.of<ConversationProvider>(context,
+                                    listen: false)
+                                .conversation,
+                          );
+                          conversationNameController.clear();
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  );
+                },
+              );
             }
 
             while (_isAnimating) {
@@ -246,56 +291,7 @@ class _Page1State extends State<Page1> {
                 _outerHeight = 240;
               });
 
-              if (!_speechToText.isListening &&
-                  !ttsManager.isPlaying &&
-                  _isAnimating) {
-                _startListening();
-              }
-
               await Future.delayed(const Duration(milliseconds: 600));
-              if (!_isAnimating) {
-                _stopListening();
-                _stopSpeaking();
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Conversation Name'),
-                      content: TextField(
-                        controller: conversationNameController,
-                        decoration: const InputDecoration(
-                          hintText: "Conversation Name",
-                        ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Provider.of<ConversationProvider>(context,
-                                    listen: false)
-                                .conversation
-                                .setName(conversationNameController.text);
-                            Provider.of<Database>(context, listen: false)
-                                .addConv(
-                              Provider.of<ConversationProvider>(context,
-                                      listen: false)
-                                  .conversation,
-                            );
-                            conversationNameController.clear();
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Save'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
 
               setState(() {
                 _width = 200;
@@ -305,9 +301,6 @@ class _Page1State extends State<Page1> {
               });
               await Future.delayed(const Duration(milliseconds: 600));
             }
-            // if () {
-            await _stopListening();
-            await _stopSpeaking();
           },
           child: StreamBuilder<bool>(
               stream: _streamController.stream,
@@ -326,7 +319,6 @@ class _Page1State extends State<Page1> {
                       width: _width,
                       height: _height,
                       decoration: BoxDecoration(
-                        // rouge, il faut parler , bleu il faut écouter
                         color: _speechToText.isNotListening
                             ? Colors.blue
                             : Colors.red,
